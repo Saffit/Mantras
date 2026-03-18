@@ -504,39 +504,68 @@ window.onload = () => {
 };
 
 // ══════════════════════════════════════════════════════
-//  AUTO-LOAD EXCEL FROM GITHUB
+//  AUTO-LOAD — tries mantras.json first, then mantras.xlsx
 // ══════════════════════════════════════════════════════
 async function loadExcelFromGitHub() {
   const banner = document.getElementById('loadBanner');
-  banner.textContent = '⏳ Loading mantras from mantras.xlsx…';
+  banner.textContent = '⏳ Loading mantras…';
   banner.className = 'status-banner info show';
+
+  // ── Try mantras.json first (written by the Worker) ──
   try {
-    // Fetch relative to current page — works on GitHub Pages
-    const resp = await fetch('./mantras.xlsx', {cache:'no-cache'});
-    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-    const buf = await resp.arrayBuffer();
-    const wb = XLSX.read(buf, {type:'array'});
-    const ws = wb.Sheets[wb.SheetNames[0]];
-    const data = XLSX.utils.sheet_to_json(ws, {defval:''});
-    const imported = [];
-    data.forEach((row,i) => {
-      const title=(row.title||'').trim(), rawS=(row.sentences||'').trim();
-      if (!title||!rawS) return;
-      imported.push({id:row.id||Date.now()+i,title,sentences:rawS.split('|').map(s=>s.trim()).filter(Boolean),tag:(row.tag||'general').trim(),gender:(row.gender||'both').trim()});
-    });
-    if (imported.length) {
-      mantras = imported;
-      banner.textContent = `✅ Loaded ${imported.length} mantras from mantras.xlsx`;
-      banner.className = 'status-banner success show';
-    } else {
-      banner.textContent = '⚠️ mantras.xlsx found but contained no valid rows — using built-in mantras.';
-      banner.className = 'status-banner error show';
+    const resp = await fetch('./mantras.json', { cache: 'no-cache' });
+    if (resp.ok) {
+      const data = await resp.json();
+      if (Array.isArray(data) && data.length) {
+        mantras = data.map(m => ({
+          ...m,
+          sentences: Array.isArray(m.sentences) ? m.sentences : (m.sentences||'').split('|').map(s=>s.trim()).filter(Boolean)
+        }));
+        banner.textContent = `✅ Loaded ${mantras.length} mantras`;
+        banner.className = 'status-banner success show';
+        setTimeout(()=>banner.classList.remove('show'), 4000);
+        renderMantraSelect();
+        return;
+      }
     }
-  } catch(e) {
-    banner.textContent = '📝 mantras.xlsx not found on this server — using built-in mantras. Commit mantras.xlsx alongside index.html on GitHub.';
-    banner.className = 'status-banner info show';
-  }
-  setTimeout(()=>{banner.classList.remove('show');},5000);
+  } catch(_) { /* fall through to xlsx */ }
+
+  // ── Fall back to mantras.xlsx (human-edited) ──
+  try {
+    const resp = await fetch('./mantras.xlsx', { cache: 'no-cache' });
+    if (resp.ok) {
+      const buf = await resp.arrayBuffer();
+      const wb  = XLSX.read(buf, { type: 'array' });
+      const ws  = wb.Sheets[wb.SheetNames[0]];
+      const data = XLSX.utils.sheet_to_json(ws, { defval: '' });
+      const imported = [];
+      data.forEach((row, i) => {
+        const title = (row.title || '').trim();
+        const rawS  = (row.sentences || '').trim();
+        if (!title || !rawS) return;
+        imported.push({
+          id:        row.id || Date.now() + i,
+          title,
+          sentences: rawS.split('|').map(s => s.trim()).filter(Boolean),
+          tag:       (row.tag    || 'general').trim(),
+          gender:    (row.gender || 'both').trim(),
+        });
+      });
+      if (imported.length) {
+        mantras = imported;
+        banner.textContent = `✅ Loaded ${mantras.length} mantras from xlsx`;
+        banner.className = 'status-banner success show';
+        setTimeout(()=>banner.classList.remove('show'), 4000);
+        renderMantraSelect();
+        return;
+      }
+    }
+  } catch(_) { /* fall through to built-ins */ }
+
+  // ── Neither file found — use built-ins ──
+  banner.textContent = '📝 Using built-in mantras. Commit mantras.json or mantras.xlsx to GitHub to load your own.';
+  banner.className = 'status-banner info show';
+  setTimeout(()=>banner.classList.remove('show'), 6000);
   renderMantraSelect();
 }
 

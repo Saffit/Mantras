@@ -1,0 +1,132 @@
+[
+  {
+    "id": 1,
+    "title": "I Am Enough",
+    "sentences": [
+      "I am worthy of love and belonging.",
+      "I deserve good things in my life.",
+      "My presence matters.",
+      "I am enough exactly as I am.",
+      "I embrace my authentic self."
+    ],
+    "tag": "self-love",
+    "gender": "feminine"
+  },
+  {
+    "id": 2,
+    "title": "Confidence Queen",
+    "sentences": [
+      "I radiate confidence and grace.",
+      "I walk into every room owning my power.",
+      "My voice deserves to be heard.",
+      "I am magnetic and captivating.",
+      "I believe in myself completely."
+    ],
+    "tag": "confidence",
+    "gender": "feminine"
+  },
+  {
+    "id": 3,
+    "title": "Abundance Flows",
+    "sentences": [
+      "Money flows to me easily and effortlessly.",
+      "I am open to receiving abundance.",
+      "I deserve financial freedom.",
+      "Opportunities find me everywhere.",
+      "I attract prosperity."
+    ],
+    "tag": "abundance",
+    "gender": "both"
+  },
+  {
+    "id": 4,
+    "title": "Body Love",
+    "sentences": [
+      "My body is beautiful and worthy of care.",
+      "I nourish myself with love.",
+      "I am grateful for everything my body does.",
+      "I treat myself with kindness.",
+      "My body deserves respect and pleasure."
+    ],
+    "tag": "body-positivity",
+    "gender": "feminine"
+  },
+  {
+    "id": 5,
+    "title": "Inner Strength",
+    "sentences": [
+      "I am stronger than I know.",
+      "Challenges make me grow.",
+      "I face fear with courage.",
+      "I trust my inner power.",
+      "Nothing can break my spirit."
+    ],
+    "tag": "strength",
+    "gender": "both"
+  },
+  {
+    "id": 6,
+    "title": "Masculine Power",
+    "sentences": [
+      "I am grounded and strong.",
+      "I provide and protect with ease.",
+      "My masculine energy is a gift.",
+      "I lead with integrity and confidence.",
+      "I am worthy of respect."
+    ],
+    "tag": "strength",
+    "gender": "masculine"
+  },
+  {
+    "id": 7,
+    "title": "Feminine Grace",
+    "sentences": [
+      "I embrace my divine feminine energy.",
+      "I am soft, powerful, and beautiful.",
+      "My femininity is my superpower.",
+      "I flow with grace and ease.",
+      "I am a goddess in my own right."
+    ],
+    "tag": "femininity",
+    "gender": "feminine"
+  },
+  {
+    "id": 8,
+    "title": "Self Worth",
+    "sentences": [
+      "I know my value.",
+      "I do not settle for less than I deserve.",
+      "My standards reflect my self-respect.",
+      "I attract what I believe I deserve.",
+      "I choose relationships that honor me."
+    ],
+    "tag": "self-love",
+    "gender": "both"
+  },
+  {
+    "id": 9,
+    "title": "Morning Glow",
+    "sentences": [
+      "Today is full of possibility.",
+      "I wake up ready to shine.",
+      "Good things are coming my way.",
+      "I am grateful for this new day.",
+      "I choose joy and gratitude."
+    ],
+    "tag": "motivation",
+    "gender": "both"
+  },
+  {
+    "id": 10,
+    "title": "Peace Within",
+    "sentences": [
+      "I release what no longer serves me.",
+      "I am calm and centered.",
+      "My inner peace is unshakeable.",
+      "I breathe in serenity.",
+      "I let go of worry and welcome peace."
+    ],
+    "tag": "mindfulness",
+    "gender": "both"
+  }
+]
