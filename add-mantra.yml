@@ -1,0 +1,81 @@
+name: Add Mantra
+
+on:
+  repository_dispatch:
+    types: [add-mantra]
+
+jobs:
+  add-mantra:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install openpyxl
+        run: pip install openpyxl
+
+      - name: Append mantra to mantras.xlsx
+        env:
+          MANTRA_TITLE:     ${{ github.event.client_payload.title }}
+          MANTRA_SENTENCES: ${{ github.event.client_payload.sentences }}
+          MANTRA_TAG:       ${{ github.event.client_payload.tag }}
+          MANTRA_GENDER:    ${{ github.event.client_payload.gender }}
+        run: |
+          python3 - <<'PYEOF'
+          import os, time
+          from openpyxl import Workbook, load_workbook
+          from openpyxl.styles import Font, PatternFill, Alignment
+
+          title     = os.environ.get('MANTRA_TITLE', '').strip()
+          sentences = os.environ.get('MANTRA_SENTENCES', '').strip()
+          tag       = os.environ.get('MANTRA_TAG', 'general').strip() or 'general'
+          gender    = os.environ.get('MANTRA_GENDER', 'both').strip() or 'both'
+          new_id    = int(time.time() * 1000)
+
+          if not title or not sentences:
+              print("ERROR: title and sentences are required")
+              exit(1)
+
+          xlsx_path = 'mantras.xlsx'
+          HEADERS   = ['id', 'title', 'sentences', 'tag', 'gender']
+
+          if os.path.exists(xlsx_path):
+              wb = load_workbook(xlsx_path)
+              ws = wb.active
+          else:
+              # Create fresh file with styled header row
+              wb = Workbook()
+              ws = wb.active
+              ws.title = 'Mantras'
+              ws.append(HEADERS)
+              for col in range(1, len(HEADERS) + 1):
+                  cell = ws.cell(row=1, column=col)
+                  cell.font      = Font(bold=True, color='FFFFFF', name='Arial')
+                  cell.fill      = PatternFill('solid', start_color='FF69B4')
+                  cell.alignment = Alignment(horizontal='center')
+              ws.column_dimensions['A'].width = 14
+              ws.column_dimensions['B'].width = 28
+              ws.column_dimensions['C'].width = 85
+              ws.column_dimensions['D'].width = 20
+              ws.column_dimensions['E'].width = 12
+
+          ws.append([new_id, title, sentences, tag, gender])
+          wb.save(xlsx_path)
+          print(f"✅ Added mantra: {title} (id={new_id})")
+          PYEOF
+
+      - name: Commit updated mantras.xlsx
+        run: |
+          git config user.name  "Mantra Bot"
+          git config user.email "mantra-bot@users.noreply.github.com"
+          git add mantras.xlsx
+          git diff --staged --quiet || git commit -m "Add mantra: ${{ github.event.client_payload.title }}"
+          git push
