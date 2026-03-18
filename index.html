@@ -481,6 +481,7 @@ let primingTimer = null, autoAdvanceLock = false;
 let audioCtx = null, analyser = null, micStream = null;
 let micActive = false, voicePanelOpen = false;
 let silenceTimer = null, silenceStart = null;
+let hasSpokeOnce = false; // must hear voice before countdown starts
 let pitchMatchEnabled = false;
 let lastPitchHz = 0;
 let pitchAnimFrame = null;
@@ -706,7 +707,7 @@ function nextSentenceType(){advanceType();}
 function prevSentenceType(){if(currentSentenceIdx>0){currentSentenceIdx--;renderSentence();showPrimingPhrase();setTimeout(()=>document.getElementById('typingInput').focus(),80);}}
 
 // ══════════════════════════════════════════════════════
-//  TYPING AUTO-ADVANCE
+//  TYPING AUTO-ADVANCE — auto-repeats through all passes
 // ══════════════════════════════════════════════════════
 function normalize(s){return s.toLowerCase().replace(/[^a-z0-9 ]/g,'').replace(/\s+/g,' ').trim();}
 function checkTypingAuto(){
@@ -716,8 +717,29 @@ function checkTypingAuto(){
   const fb=document.getElementById('typeFeedback');
   if(!input){fb.textContent='';fb.className='type-feedback';return;}
   if(input===target){
-    autoAdvanceLock=true;fb.textContent=isMasc?'✅ Locked.':'💖 Perfect!';fb.className='type-feedback correct';
-    setTimeout(advanceType,420);
+    autoAdvanceLock=true;
+    fb.textContent=isMasc?'✅ Locked.':'💖 Perfect!';
+    fb.className='type-feedback correct';
+    setTimeout(()=>{
+      // advance through sentences AND repeats automatically
+      const total=getRepeatCount();
+      const isLastSentence=currentSentenceIdx===currentMantra.sentences.length-1;
+      if(!isLastSentence){
+        currentSentenceIdx++;
+        renderSentence();showPrimingPhrase();
+        setTimeout(()=>document.getElementById('typingInput').focus(),80);
+        autoAdvanceLock=false;
+      } else if(total===Infinity||currentRepeat<total){
+        currentRepeat++;currentSentenceIdx=0;
+        renderSentence();showPrimingPhrase();showAffirmation();updateRepeatBadge();
+        setTimeout(()=>document.getElementById('typingInput').focus(),80);
+        autoAdvanceLock=false;
+      } else {
+        celebrate();
+        showToast(isMasc?'✅ Session complete!':'💖 All done!');
+        autoAdvanceLock=false;
+      }
+    },420);
   } else {
     const iW=input.split(' ').filter(Boolean),tW=target.split(' ').filter(Boolean);
     const m=iW.filter((w,i)=>tW[i]&&tW[i].startsWith(w)).length;
@@ -785,6 +807,7 @@ async function startMic(){
     src.connect(analyser);
     micActive=true;
     silenceStart=null;
+    hasSpokeOnce=false;
     document.getElementById('micToggleBtn').textContent='🔴 Stop Listening';
     document.getElementById('micToggleBtn').className='btn btn-sm btn-danger';
     document.getElementById('micIndicator').className='mic-indicator listening';
@@ -804,7 +827,7 @@ function stopMic(){
   if(pitchAnimFrame)cancelAnimationFrame(pitchAnimFrame);pitchAnimFrame=null;
   if(micStream)micStream.getTracks().forEach(t=>t.stop());
   if(audioCtx)audioCtx.close();
-  audioCtx=null;analyser=null;micStream=null;silenceStart=null;
+  audioCtx=null;analyser=null;micStream=null;silenceStart=null;hasSpokeOnce=false;
   document.getElementById('micToggleBtn').textContent='🎙 Start Listening';
   document.getElementById('micToggleBtn').className='btn btn-sm btn-primary';
   document.getElementById('micIndicator').className='mic-indicator';
@@ -876,27 +899,51 @@ function handleSilenceTimer(isSpeaking){
   const countdown=document.getElementById('voiceCountdown');
 
   if(isSpeaking){
+    // First time voice is heard on this sentence — unlock the countdown
+    if(!hasSpokeOnce){
+      hasSpokeOnce=true;
+      statusText.textContent='Voice detected — keep going…';
+    }
     silenceStart=null;
-    if(silenceTimer){clearTimeout(silenceTimer);silenceTimer=null;}
     countdown.textContent='';
     indicator.className='mic-indicator listening';
-    statusText.textContent='Detecting voice…';
+    if(hasSpokeOnce) statusText.textContent='Detecting voice…';
   } else {
+    // Don't start countdown until voice has been heard at least once
+    if(!hasSpokeOnce){
+      indicator.className='mic-indicator';
+      statusText.textContent='Waiting for you to speak…';
+      countdown.textContent='';
+      return;
+    }
     if(!silenceStart)silenceStart=Date.now();
     const elapsed=(Date.now()-silenceStart)/1000;
     const remaining=Math.max(0,pauseSec-elapsed);
     indicator.className='mic-indicator silent';
 
     if(elapsed>=pauseSec){
-      // Fire!
+      // Advance — respects repeats exactly like type mode
       silenceStart=null;
+      hasSpokeOnce=false; // reset for next sentence
       countdown.textContent='';
-      statusText.textContent='Silence detected — advancing…';
+      statusText.textContent='Pause detected — advancing…';
       indicator.className='mic-indicator listening';
       if(!autoAdvanceLock){
         autoAdvanceLock=true;
         setTimeout(()=>{
-          nextSentence();
+          const total=getRepeatCount();
+          const isLastSentence=currentSentenceIdx===currentMantra.sentences.length-1;
+          if(!isLastSentence){
+            currentSentenceIdx++;
+            renderSentence();showPrimingPhrase();
+          } else if(total===Infinity||currentRepeat<total){
+            currentRepeat++;currentSentenceIdx=0;
+            renderSentence();showPrimingPhrase();showAffirmation();updateRepeatBadge();
+          } else {
+            celebrate();
+            showToast(isMasc?'✅ Session complete!':'💖 All done!');
+            stopMic();
+          }
           autoAdvanceLock=false;
         },200);
       }
@@ -910,8 +957,9 @@ function handleSilenceTimer(isSpeaking){
 // ── Reset silence timer (called on new sentence) ──
 function resetSilenceTimer(){
   silenceStart=null;
+  hasSpokeOnce=false;
   document.getElementById('voiceCountdown').textContent='';
-  document.getElementById('voiceStatusText').textContent='Listening… Say the line when you\'re ready.';
+  document.getElementById('voiceStatusText').textContent='Waiting for you to speak…';
 }
 
 // ══════════════════════════════════════════════════════
