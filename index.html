@@ -9,162 +9,236 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Dancing+Script:wght@600;700&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
-  :root {
-    --pink:#FF69B4;--hot-pink:#FF1493;--baby-pink:#FFB6C1;--blush:#FFD6E7;
-    --rose:#FF85A1;--lavender:#E8B4FF;--cream:#FFF5F9;--gold:#FFD700;
-    --text-dark:#4A1942;--text-mid:#7B3F6E;--shadow:rgba(255,105,180,0.3);
-    --masc-blue:#1E3A5F;--masc-navy:#0A1628;--masc-steel:#2E6DA4;
-    --masc-silver:#B8C5D6;--masc-gold:#C8A44A;
-  }
-  *{margin:0;padding:0;box-sizing:border-box;}
-  body{min-height:100vh;font-family:'Nunito',sans-serif;background:var(--cream);color:var(--text-dark);transition:background .5s,color .5s;overflow-x:hidden;}
-  body::before{content:'';position:fixed;inset:0;z-index:-2;background:radial-gradient(ellipse 80% 60% at 20% 10%,#FFD6E7 0%,transparent 60%),radial-gradient(ellipse 60% 80% at 80% 90%,#E8B4FF 0%,transparent 60%),radial-gradient(ellipse 50% 50% at 50% 50%,#FFF0F8 0%,#FFF5F9 100%);transition:background .5s;}
-  body::after{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;background-image:radial-gradient(circle 2px at 10% 20%,rgba(255,105,180,.3) 100%,transparent),radial-gradient(circle 1px at 30% 60%,rgba(232,180,255,.4) 100%,transparent),radial-gradient(circle 2px at 70% 15%,rgba(255,182,193,.4) 100%,transparent);}
-  body.masc{--pink:#2E6DA4;--hot-pink:#1A4B7A;--baby-pink:#4A7FA5;--blush:#1E3A5F;--rose:#3A7CC2;--lavender:#2A5A8A;--cream:#0D1B2A;--gold:#C8A44A;--text-dark:#E8F0F8;--text-mid:#B8C5D6;--shadow:rgba(46,109,164,.4);background:#0D1B2A;}
-  body.masc::before{background:radial-gradient(ellipse 80% 60% at 20% 10%,#1A3554 0%,transparent 60%),radial-gradient(ellipse 60% 80% at 80% 90%,#0F2740 0%,transparent 60%),radial-gradient(ellipse 50% 50% at 50% 50%,#0D1B2A 0%,#0A1628 100%);}
-  body.masc::after{background:none;}
+:root{
+  --pink:#FF69B4;--hot-pink:#FF1493;--rose:#FF85A1;--lavender:#E8B4FF;
+  --cream:#FFF5F9;--gold:#FFD700;--text-dark:#4A1942;--text-mid:#7B3F6E;
+  --shadow:rgba(255,105,180,0.3);
+  --masc-blue:#1E3A5F;--masc-steel:#2E6DA4;--masc-silver:#B8C5D6;--masc-gold:#C8A44A;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{min-height:100vh;font-family:'Nunito',sans-serif;background:var(--cream);color:var(--text-dark);transition:background .5s,color .5s;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;z-index:-2;
+  background:radial-gradient(ellipse 80% 60% at 20% 10%,#FFD6E7 0%,transparent 60%),
+    radial-gradient(ellipse 60% 80% at 80% 90%,#E8B4FF 0%,transparent 60%),
+    radial-gradient(ellipse 50% 50% at 50% 50%,#FFF0F8 0%,#FFF5F9 100%);
+  transition:background .5s;}
+body::after{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background-image:radial-gradient(circle 2px at 10% 20%,rgba(255,105,180,.3) 100%,transparent),
+    radial-gradient(circle 1px at 30% 60%,rgba(232,180,255,.4) 100%,transparent),
+    radial-gradient(circle 2px at 70% 15%,rgba(255,182,193,.4) 100%,transparent);}
+body.masc{--pink:#2E6DA4;--hot-pink:#1A4B7A;--rose:#3A7CC2;--lavender:#2A5A8A;
+  --cream:#0D1B2A;--gold:#C8A44A;--text-dark:#E8F0F8;--text-mid:#B8C5D6;
+  --shadow:rgba(46,109,164,.4);background:#0D1B2A;}
+body.masc::before{background:radial-gradient(ellipse 80% 60% at 20% 10%,#1A3554 0%,transparent 60%),
+  radial-gradient(ellipse 60% 80% at 80% 90%,#0F2740 0%,transparent 60%),
+  radial-gradient(ellipse 50% 50% at 50% 50%,#0D1B2A 0%,#0A1628 100%);}
+body.masc::after{background:none;}
 
-  .sparkle-container{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
-  .sparkle{position:absolute;animation:floatSparkle linear infinite;opacity:0;}
-  @keyframes floatSparkle{0%{transform:translateY(100vh) rotate(0deg);opacity:0;}10%{opacity:.7;}90%{opacity:.5;}100%{transform:translateY(-10vh) rotate(720deg);opacity:0;}}
-  body.masc .sparkle{display:none;}
+.sparkle-container{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+.sparkle{position:absolute;animation:floatSparkle linear infinite;opacity:0;}
+@keyframes floatSparkle{0%{transform:translateY(100vh) rotate(0deg);opacity:0;}10%{opacity:.7;}90%{opacity:.5;}100%{transform:translateY(-10vh) rotate(720deg);opacity:0;}}
+body.masc .sparkle{display:none;}
 
-  header{text-align:center;padding:40px 20px 20px;position:relative;z-index:10;}
-  .site-title{font-family:'Dancing Script',cursive;font-size:clamp(2.5rem,6vw,4.5rem);background:linear-gradient(135deg,var(--hot-pink),var(--lavender),var(--rose));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 2px 8px var(--shadow));line-height:1.2;}
-  body.masc .site-title{background:linear-gradient(135deg,#C8A44A,#2E6DA4,#7BA8D0);-webkit-background-clip:text;background-clip:text;}
-  .site-subtitle{font-size:.88rem;color:var(--text-mid);letter-spacing:.15em;text-transform:uppercase;margin-top:6px;}
+header{text-align:center;padding:40px 20px 20px;position:relative;z-index:10;}
+.site-title{font-family:'Dancing Script',cursive;font-size:clamp(2.5rem,6vw,4.5rem);
+  background:linear-gradient(135deg,var(--hot-pink),var(--lavender),var(--rose));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 2px 8px var(--shadow));line-height:1.2;}
+body.masc .site-title{background:linear-gradient(135deg,#C8A44A,#2E6DA4,#7BA8D0);-webkit-background-clip:text;background-clip:text;}
+.site-subtitle{font-size:.88rem;color:var(--text-mid);letter-spacing:.15em;text-transform:uppercase;margin-top:6px;}
 
-  .mode-toggle-wrap{position:fixed;top:20px;right:20px;z-index:100;display:flex;align-items:center;gap:10px;}
-  .mode-label{font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-mid);}
-  .toggle-switch{position:relative;width:56px;height:28px;cursor:pointer;}
-  .toggle-switch input{display:none;}
-  .toggle-track{position:absolute;inset:0;background:linear-gradient(90deg,var(--pink),var(--lavender));border-radius:14px;transition:all .4s;box-shadow:0 2px 8px var(--shadow);}
-  .toggle-thumb{position:absolute;top:3px;left:3px;width:22px;height:22px;background:white;border-radius:50%;transition:all .4s cubic-bezier(.34,1.56,.64,1);display:flex;align-items:center;justify-content:center;font-size:.8rem;box-shadow:0 2px 6px rgba(0,0,0,.2);}
-  input:checked~.toggle-track{background:linear-gradient(90deg,#1E3A5F,#2E6DA4);}
-  input:checked~.toggle-thumb{left:31px;}
+.mode-toggle-wrap{position:fixed;top:20px;right:20px;z-index:100;display:flex;align-items:center;gap:10px;}
+.mode-label{font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-mid);}
+.toggle-switch{position:relative;width:56px;height:28px;cursor:pointer;}
+.toggle-switch input{display:none;}
+.toggle-track{position:absolute;inset:0;background:linear-gradient(90deg,var(--pink),var(--lavender));border-radius:14px;transition:all .4s;box-shadow:0 2px 8px var(--shadow);}
+.toggle-thumb{position:absolute;top:3px;left:3px;width:22px;height:22px;background:white;border-radius:50%;transition:all .4s cubic-bezier(.34,1.56,.64,1);display:flex;align-items:center;justify-content:center;font-size:.8rem;box-shadow:0 2px 6px rgba(0,0,0,.2);}
+input:checked~.toggle-track{background:linear-gradient(90deg,#1E3A5F,#2E6DA4);}
+input:checked~.toggle-thumb{left:31px;}
 
-  .container{max-width:900px;margin:0 auto;padding:0 20px 60px;position:relative;z-index:5;}
-  .card{background:rgba(255,255,255,.7);backdrop-filter:blur(20px);border-radius:24px;padding:30px;margin-bottom:24px;border:1.5px solid rgba(255,105,180,.2);box-shadow:0 8px 32px var(--shadow);transition:all .3s;}
-  body.masc .card{background:rgba(20,40,65,.8);border-color:rgba(46,109,164,.3);box-shadow:0 8px 32px rgba(0,0,0,.4);}
-  .section-title{font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--hot-pink);margin-bottom:18px;display:flex;align-items:center;gap:10px;}
-  body.masc .section-title{color:var(--gold);}
+.container{max-width:900px;margin:0 auto;padding:0 20px 60px;position:relative;z-index:5;}
+.card{background:rgba(255,255,255,.7);backdrop-filter:blur(20px);border-radius:24px;padding:30px;margin-bottom:24px;border:1.5px solid rgba(255,105,180,.2);box-shadow:0 8px 32px var(--shadow);transition:all .3s;}
+body.masc .card{background:rgba(20,40,65,.8);border-color:rgba(46,109,164,.3);box-shadow:0 8px 32px rgba(0,0,0,.4);}
+.section-title{font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--hot-pink);margin-bottom:18px;display:flex;align-items:center;gap:10px;}
+body.masc .section-title{color:var(--gold);}
 
-  /* TAG SEARCH */
-  .tag-search-wrap{position:relative;margin-bottom:10px;}
-  .tag-search-input{width:100%;padding:11px 18px 11px 42px;border-radius:50px;border:2px solid rgba(255,105,180,.35);background:rgba(255,255,255,.85);font-family:'Nunito',sans-serif;font-size:.9rem;color:var(--text-dark);outline:none;transition:all .25s;}
-  .tag-search-input:focus{border-color:var(--pink);box-shadow:0 0 0 4px rgba(255,105,180,.1);}
-  .tag-search-icon{position:absolute;left:15px;top:50%;transform:translateY(-50%);font-size:1rem;pointer-events:none;opacity:.5;}
-  .tag-hint{font-size:.74rem;color:var(--text-mid);opacity:.65;padding-left:4px;margin-top:5px;}
-  .tag-match-display{display:none;margin-top:7px;font-size:.77rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--pink);background:rgba(255,105,180,.1);padding:4px 14px;border-radius:50px;}
-  body.masc .tag-search-input{background:rgba(15,30,50,.9);border-color:rgba(46,109,164,.3);color:var(--text-dark);}
-  body.masc .tag-match-display{color:var(--masc-gold);background:rgba(200,164,74,.1);}
+/* TAG SEARCH */
+.tag-search-wrap{position:relative;margin-bottom:10px;}
+.tag-search-input{width:100%;padding:11px 18px 11px 42px;border-radius:50px;border:2px solid rgba(255,105,180,.35);background:rgba(255,255,255,.85);font-family:'Nunito',sans-serif;font-size:.9rem;color:var(--text-dark);outline:none;transition:all .25s;}
+.tag-search-input:focus{border-color:var(--pink);box-shadow:0 0 0 4px rgba(255,105,180,.1);}
+.tag-search-icon{position:absolute;left:15px;top:50%;transform:translateY(-50%);font-size:1rem;pointer-events:none;opacity:.5;}
+.tag-hint{font-size:.74rem;color:var(--text-mid);opacity:.65;padding-left:4px;margin-top:5px;}
+.tag-match-display{display:none;margin-top:7px;font-size:.77rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--pink);background:rgba(255,105,180,.1);padding:4px 14px;border-radius:50px;}
+body.masc .tag-search-input{background:rgba(15,30,50,.9);border-color:rgba(46,109,164,.3);color:var(--text-dark);}
+body.masc .tag-match-display{color:var(--masc-gold);background:rgba(200,164,74,.1);}
 
-  .mantra-select-wrap{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-top:14px;}
-  select{flex:1;min-width:200px;padding:12px 18px;border-radius:50px;border:2px solid var(--pink);background:rgba(255,255,255,.85);color:var(--text-dark);font-family:'Nunito',sans-serif;font-size:.95rem;font-weight:600;cursor:pointer;outline:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M0 0l6 8 6-8z' fill='%23FF69B4'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center;transition:all .2s;}
-  body.masc select{background-color:rgba(15,30,50,.9);border-color:var(--masc-steel);color:var(--text-dark);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M0 0l6 8 6-8z' fill='%232E6DA4'/%3E%3C/svg%3E");}
+.mantra-select-wrap{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-top:14px;}
+select{flex:1;min-width:200px;padding:12px 18px;border-radius:50px;border:2px solid var(--pink);background:rgba(255,255,255,.85);color:var(--text-dark);font-family:'Nunito',sans-serif;font-size:.95rem;font-weight:600;cursor:pointer;outline:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M0 0l6 8 6-8z' fill='%23FF69B4'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center;transition:all .2s;}
+body.masc select{background-color:rgba(15,30,50,.9);border-color:var(--masc-steel);color:var(--text-dark);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M0 0l6 8 6-8z' fill='%232E6DA4'/%3E%3C/svg%3E");}
 
-  .btn{padding:12px 24px;border-radius:50px;border:none;font-family:'Nunito',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;transition:all .25s cubic-bezier(.34,1.56,.64,1);letter-spacing:.05em;display:inline-flex;align-items:center;gap:7px;}
-  .btn-primary{background:linear-gradient(135deg,var(--hot-pink),var(--rose));color:white;box-shadow:0 4px 15px var(--shadow);}
-  .btn-primary:hover{transform:translateY(-3px) scale(1.03);box-shadow:0 8px 25px var(--shadow);}
-  .btn-secondary{background:white;color:var(--hot-pink);border:2px solid var(--pink);}
-  body.masc .btn-primary{background:linear-gradient(135deg,var(--masc-blue),var(--masc-steel));box-shadow:0 4px 15px rgba(46,109,164,.4);}
-  body.masc .btn-secondary{background:rgba(20,40,65,.9);color:var(--masc-silver);border-color:var(--masc-steel);}
-  .btn:active{transform:scale(.97);}
-  .btn:disabled{opacity:.4;cursor:not-allowed;transform:none!important;}
+.btn{padding:12px 24px;border-radius:50px;border:none;font-family:'Nunito',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;transition:all .25s cubic-bezier(.34,1.56,.64,1);letter-spacing:.05em;display:inline-flex;align-items:center;gap:7px;}
+.btn-primary{background:linear-gradient(135deg,var(--hot-pink),var(--rose));color:white;box-shadow:0 4px 15px var(--shadow);}
+.btn-primary:hover{transform:translateY(-3px) scale(1.03);box-shadow:0 8px 25px var(--shadow);}
+.btn-secondary{background:white;color:var(--hot-pink);border:2px solid var(--pink);}
+.btn-danger{background:transparent;color:#e74c3c;border:2px solid #e74c3c;}
+body.masc .btn-primary{background:linear-gradient(135deg,var(--masc-blue),var(--masc-steel));box-shadow:0 4px 15px rgba(46,109,164,.4);}
+body.masc .btn-secondary{background:rgba(20,40,65,.9);color:var(--masc-silver);border-color:var(--masc-steel);}
+.btn:active{transform:scale(.97);}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none!important;}
+.btn-sm{padding:8px 16px;font-size:.8rem;}
 
-  /* REPEAT ROW */
-  .repeat-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:16px;}
-  .repeat-label{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-mid);white-space:nowrap;}
-  .repeat-input{width:80px;padding:9px 12px;border-radius:50px;border:2px solid rgba(255,105,180,.35);background:rgba(255,255,255,.85);font-family:'Nunito',sans-serif;font-size:.95rem;font-weight:700;color:var(--text-dark);text-align:center;outline:none;transition:all .2s;}
-  .repeat-input:focus{border-color:var(--pink);box-shadow:0 0 0 3px rgba(255,105,180,.12);}
-  body.masc .repeat-input{background:rgba(15,30,50,.9);border-color:rgba(46,109,164,.3);color:var(--text-dark);}
-  .repeat-hint{font-size:.72rem;color:var(--text-mid);opacity:.68;}
-  .repeat-badge{font-size:.77rem;font-weight:700;padding:4px 14px;border-radius:50px;background:rgba(255,105,180,.1);color:var(--pink);letter-spacing:.05em;white-space:nowrap;}
-  body.masc .repeat-badge{background:rgba(46,109,164,.15);color:var(--masc-silver);}
+/* REPEAT ROW */
+.repeat-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:16px;}
+.repeat-label{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-mid);white-space:nowrap;}
+.repeat-input{width:80px;padding:9px 12px;border-radius:50px;border:2px solid rgba(255,105,180,.35);background:rgba(255,255,255,.85);font-family:'Nunito',sans-serif;font-size:.95rem;font-weight:700;color:var(--text-dark);text-align:center;outline:none;transition:all .2s;}
+.repeat-input:focus{border-color:var(--pink);box-shadow:0 0 0 3px rgba(255,105,180,.12);}
+body.masc .repeat-input{background:rgba(15,30,50,.9);border-color:rgba(46,109,164,.3);color:var(--text-dark);}
+.repeat-hint{font-size:.72rem;color:var(--text-mid);opacity:.68;}
+.repeat-badge{font-size:.77rem;font-weight:700;padding:4px 14px;border-radius:50px;background:rgba(255,105,180,.1);color:var(--pink);letter-spacing:.05em;white-space:nowrap;}
+body.masc .repeat-badge{background:rgba(46,109,164,.15);color:var(--masc-silver);}
 
-  /* PRIMING PHRASE */
-  .priming-phrase{font-family:'Nunito',sans-serif;font-size:.8rem;font-weight:800;text-transform:uppercase;letter-spacing:.18em;color:var(--rose);opacity:0;min-height:22px;transition:opacity .5s ease;text-align:center;margin-bottom:10px;}
-  .priming-phrase.show{opacity:.82;}
-  body.masc .priming-phrase{color:var(--masc-gold);}
+/* PRIMING PHRASE */
+.priming-phrase{font-family:'Nunito',sans-serif;font-size:.8rem;font-weight:800;text-transform:uppercase;letter-spacing:.18em;color:var(--rose);opacity:0;min-height:22px;transition:opacity .5s ease;text-align:center;margin-bottom:10px;}
+.priming-phrase.show{opacity:.82;}
+body.masc .priming-phrase{color:var(--masc-gold);}
 
-  /* PRACTICE ARENA */
-  .practice-arena{min-height:230px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:10px 20px;}
-  .mantra-title-display{font-family:'Dancing Script',cursive;font-size:1.7rem;color:var(--rose);margin-bottom:6px;opacity:.6;}
-  body.masc .mantra-title-display{color:var(--masc-gold);}
-  .sentence-display{font-family:'Playfair Display',serif;font-size:clamp(1.3rem,3.5vw,2.1rem);line-height:1.55;color:var(--text-dark);max-width:680px;padding:18px;position:relative;animation:fadeUp .55s ease;}
-  @keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
-  .sentence-display::before,.sentence-display::after{font-family:'Playfair Display',serif;font-size:5rem;color:var(--pink);opacity:.12;position:absolute;line-height:1;}
-  .sentence-display::before{content:'\201C';top:-8px;left:0;}
-  .sentence-display::after{content:'\201D';bottom:-28px;right:0;}
-  body.masc .sentence-display::before,body.masc .sentence-display::after{color:var(--masc-steel);}
-  .progress-dots{display:flex;gap:8px;margin:18px 0 6px;}
-  .dot{width:10px;height:10px;border-radius:50%;background:rgba(255,105,180,.2);transition:all .3s;}
-  .dot.active{background:var(--pink);transform:scale(1.35);box-shadow:0 0 8px var(--pink);}
-  .dot.done{background:var(--rose);opacity:.55;}
-  body.masc .dot{background:rgba(46,109,164,.2);}
-  body.masc .dot.active{background:var(--masc-steel);box-shadow:0 0 8px var(--masc-steel);}
-  body.masc .dot.done{background:var(--masc-blue);}
-  .controls{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:16px;}
+/* PRACTICE ARENA */
+.practice-arena{min-height:220px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:10px 20px;}
+.mantra-title-display{font-family:'Dancing Script',cursive;font-size:1.7rem;color:var(--rose);margin-bottom:6px;opacity:.6;}
+body.masc .mantra-title-display{color:var(--masc-gold);}
+.sentence-display{font-family:'Playfair Display',serif;font-size:clamp(1.3rem,3.5vw,2.1rem);line-height:1.55;color:var(--text-dark);max-width:680px;padding:18px;position:relative;animation:fadeUp .55s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+.sentence-display::before,.sentence-display::after{font-family:'Playfair Display',serif;font-size:5rem;color:var(--pink);opacity:.12;position:absolute;line-height:1;}
+.sentence-display::before{content:'\201C';top:-8px;left:0;}
+.sentence-display::after{content:'\201D';bottom:-28px;right:0;}
+body.masc .sentence-display::before,body.masc .sentence-display::after{color:var(--masc-steel);}
 
-  /* MODE TABS */
-  .mode-tabs{display:flex;border-radius:50px;overflow:hidden;border:2px solid var(--pink);width:fit-content;margin:0 auto 22px;}
-  .mode-tab{padding:9px 24px;background:transparent;border:none;color:var(--pink);font-family:'Nunito',sans-serif;font-size:.82rem;font-weight:700;cursor:pointer;transition:all .2s;text-transform:uppercase;letter-spacing:.05em;}
-  .mode-tab.active{background:var(--pink);color:white;}
-  body.masc .mode-tabs{border-color:var(--masc-steel);}
-  body.masc .mode-tab{color:var(--masc-silver);}
-  body.masc .mode-tab.active{background:var(--masc-steel);color:white;}
+.progress-dots{display:flex;gap:8px;margin:16px 0 4px;}
+.dot{width:10px;height:10px;border-radius:50%;background:rgba(255,105,180,.2);transition:all .3s;}
+.dot.active{background:var(--pink);transform:scale(1.35);box-shadow:0 0 8px var(--pink);}
+.dot.done{background:var(--rose);opacity:.55;}
+body.masc .dot{background:rgba(46,109,164,.2);}
+body.masc .dot.active{background:var(--masc-steel);box-shadow:0 0 8px var(--masc-steel);}
+body.masc .dot.done{background:var(--masc-blue);}
+.controls{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:16px;}
 
-  /* TYPE MODE */
-  .typing-section{display:none;}
-  .typing-section.visible{display:block;}
-  .type-prompt{font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(1.05rem,2.5vw,1.5rem);color:var(--text-dark);text-align:center;margin-bottom:14px;padding:0 20px;opacity:.75;animation:fadeUp .55s ease;}
-  .typing-input{width:100%;padding:14px 18px;border-radius:16px;border:2px solid var(--pink);background:rgba(255,255,255,.88);font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--text-dark);outline:none;transition:all .3s;resize:none;min-height:56px;overflow:hidden;}
-  .typing-input:focus{border-color:var(--hot-pink);box-shadow:0 0 0 4px rgba(255,20,147,.1);}
-  body.masc .typing-input{background:rgba(15,30,50,.9);border-color:var(--masc-steel);color:var(--text-dark);}
-  .type-feedback{text-align:center;margin-top:10px;font-weight:700;font-size:.98rem;min-height:24px;transition:all .3s;}
-  .type-feedback.correct{color:#2ECC71;}
-  .type-feedback.close{color:#F4C430;}
-  .type-feedback.wrong{color:var(--hot-pink);}
+/* MODE TABS */
+.mode-tabs{display:flex;border-radius:50px;overflow:hidden;border:2px solid var(--pink);width:fit-content;margin:0 auto 22px;}
+.mode-tab{padding:9px 22px;background:transparent;border:none;color:var(--pink);font-family:'Nunito',sans-serif;font-size:.8rem;font-weight:700;cursor:pointer;transition:all .2s;text-transform:uppercase;letter-spacing:.05em;}
+.mode-tab.active{background:var(--pink);color:white;}
+body.masc .mode-tabs{border-color:var(--masc-steel);}
+body.masc .mode-tab{color:var(--masc-silver);}
+body.masc .mode-tab.active{background:var(--masc-steel);color:white;}
 
-  /* AFFIRMATION */
-  .affirmation-box{background:linear-gradient(135deg,rgba(255,20,147,.07),rgba(232,180,255,.1));border-left:4px solid var(--pink);border-radius:0 16px 16px 0;padding:16px 46px 16px 20px;font-style:italic;font-family:'Playfair Display',serif;color:var(--text-mid);font-size:.92rem;line-height:1.75;position:relative;overflow:hidden;margin-top:20px;}
-  body.masc .affirmation-box{background:linear-gradient(135deg,rgba(46,109,164,.1),rgba(0,0,0,.08));border-left-color:var(--masc-steel);color:var(--masc-silver);}
-  .affirmation-box::before{content:'💭';font-size:2.2rem;position:absolute;right:14px;top:50%;transform:translateY(-50%);opacity:.12;}
-  body.masc .affirmation-box::before{content:'🧠';}
+/* ── VOICE PANEL ── */
+.voice-panel{margin-top:20px;border-radius:18px;overflow:hidden;border:1.5px solid rgba(255,105,180,.2);transition:all .3s;}
+body.masc .voice-panel{border-color:rgba(46,109,164,.25);}
+.voice-header{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:rgba(255,105,180,.06);cursor:pointer;gap:10px;flex-wrap:wrap;}
+body.masc .voice-header{background:rgba(46,109,164,.08);}
+.voice-header-left{display:flex;align-items:center;gap:10px;font-weight:700;font-size:.88rem;color:var(--text-mid);}
+.voice-header-right{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.voice-body{display:none;padding:18px 20px;background:rgba(255,255,255,.4);}
+body.masc .voice-body{background:rgba(10,22,40,.3);}
+.voice-body.open{display:block;}
 
-  /* PSYCH */
-  .psych-card{background:rgba(255,255,255,.5);border-radius:16px;padding:18px 22px;margin-bottom:14px;border:1px solid rgba(255,105,180,.14);}
-  body.masc .psych-card{background:rgba(15,30,50,.6);border-color:rgba(46,109,164,.2);}
-  .psych-card h4{font-family:'Playfair Display',serif;color:var(--hot-pink);font-size:1rem;margin-bottom:8px;display:flex;align-items:center;gap:8px;}
-  body.masc .psych-card h4{color:var(--masc-gold);}
-  .psych-card p{font-size:.87rem;line-height:1.72;color:var(--text-mid);}
-  body.masc .psych-card p{color:var(--masc-silver);}
+/* voice controls row */
+.voice-controls-row{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-bottom:16px;}
+.voice-setting{display:flex;align-items:center;gap:8px;font-size:.8rem;color:var(--text-mid);font-weight:700;text-transform:uppercase;letter-spacing:.08em;}
+.voice-setting input[type=number]{width:68px;padding:7px 10px;border-radius:50px;border:2px solid rgba(255,105,180,.3);background:rgba(255,255,255,.85);font-family:'Nunito',sans-serif;font-size:.9rem;font-weight:700;color:var(--text-dark);text-align:center;outline:none;}
+body.masc .voice-setting input[type=number]{background:rgba(15,30,50,.9);border-color:rgba(46,109,164,.3);color:var(--text-dark);}
 
-  /* MANAGE */
-  .admin-section{display:none;}
-  .admin-section.visible{display:block;}
-  .form-group{margin-bottom:14px;}
-  .form-group label{display:block;font-size:.77rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-mid);margin-bottom:6px;}
-  .form-group input,.form-group textarea,.form-group select.form-input{width:100%;padding:11px 14px;border-radius:12px;border:2px solid rgba(255,105,180,.28);background:rgba(255,255,255,.88);font-family:'Nunito',sans-serif;font-size:.9rem;color:var(--text-dark);outline:none;transition:all .2s;appearance:auto;}
-  .form-group input:focus,.form-group textarea:focus{border-color:var(--pink);box-shadow:0 0 0 3px rgba(255,105,180,.1);}
-  body.masc .form-group input,body.masc .form-group textarea,body.masc .form-group select.form-input{background:rgba(15,30,50,.9);border-color:rgba(46,109,164,.3);color:var(--text-dark);}
-  .form-group textarea{min-height:80px;resize:vertical;}
-  .hint-text{font-size:.73rem;color:var(--text-mid);opacity:.68;}
+/* pitch toggle */
+.pitch-toggle-wrap{display:flex;align-items:center;gap:8px;font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-mid);}
+.mini-toggle{position:relative;width:42px;height:22px;cursor:pointer;}
+.mini-toggle input{display:none;}
+.mini-track{position:absolute;inset:0;background:rgba(255,105,180,.3);border-radius:11px;transition:all .3s;}
+.mini-thumb{position:absolute;top:2px;left:2px;width:18px;height:18px;background:white;border-radius:50%;transition:all .3s cubic-bezier(.34,1.56,.64,1);box-shadow:0 1px 4px rgba(0,0,0,.2);}
+.mini-toggle input:checked~.mini-track{background:var(--pink);}
+.mini-toggle input:checked~.mini-thumb{left:22px;}
+body.masc .mini-toggle input:checked~.mini-track{background:var(--masc-steel);}
 
-  /* TOAST */
-  .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--hot-pink);color:white;padding:13px 28px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.87rem;z-index:1000;opacity:0;transition:all .4s cubic-bezier(.34,1.56,.64,1);pointer-events:none;box-shadow:0 8px 30px rgba(255,20,147,.4);}
-  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
-  body.masc .toast{background:var(--masc-steel);box-shadow:0 8px 30px rgba(46,109,164,.4);}
+/* voice status area */
+.voice-status-bar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.mic-indicator{width:14px;height:14px;border-radius:50%;background:#ccc;flex-shrink:0;transition:all .3s;box-shadow:0 0 0 0 rgba(255,105,180,0);}
+.mic-indicator.listening{background:#2ECC71;box-shadow:0 0 0 5px rgba(46,204,113,.2);animation:pulse 1.5s infinite;}
+.mic-indicator.silent{background:#F39C12;box-shadow:0 0 0 4px rgba(243,156,18,.2);}
+.mic-indicator.error{background:#e74c3c;}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 5px rgba(46,204,113,.2);}50%{box-shadow:0 0 0 10px rgba(46,204,113,.05);}}
+.voice-status-text{font-size:.82rem;color:var(--text-mid);flex:1;}
+.voice-countdown{font-family:'Dancing Script',cursive;font-size:2rem;color:var(--pink);font-weight:700;min-width:30px;text-align:center;transition:all .2s;}
+body.masc .voice-countdown{color:var(--masc-gold);}
 
-  /* CELEBRATION */
-  .celebration{position:fixed;inset:0;z-index:200;pointer-events:none;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .3s;}
-  .celebration.show{opacity:1;}
-  .celebration-text{font-family:'Dancing Script',cursive;font-size:clamp(2.5rem,8vw,5rem);background:linear-gradient(135deg,var(--hot-pink),var(--lavender),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:celebPop 1s ease;filter:drop-shadow(0 4px 20px var(--shadow));}
-  @keyframes celebPop{0%{transform:scale(.5) rotate(-5deg);}60%{transform:scale(1.15) rotate(3deg);}100%{transform:scale(1) rotate(0deg);}}
+/* pitch meter */
+.pitch-meter-wrap{margin-top:14px;}
+.pitch-meter-label{font-size:.74rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-mid);margin-bottom:7px;}
+.pitch-bar-track{height:14px;border-radius:7px;background:rgba(255,105,180,.1);position:relative;overflow:hidden;}
+body.masc .pitch-bar-track{background:rgba(46,109,164,.1);}
+.pitch-bar-fill{height:100%;border-radius:7px;background:linear-gradient(90deg,#3498DB,#9B59B6,var(--pink),#F39C12);transition:width .1s ease,background .3s;}
+.pitch-zone-marker{position:absolute;top:0;bottom:0;border-right:2px dashed rgba(255,255,255,.5);pointer-events:none;}
+.pitch-feedback{margin-top:8px;font-size:.82rem;font-weight:700;min-height:20px;transition:all .3s;}
+.pitch-feedback.good{color:#2ECC71;}
+.pitch-feedback.low{color:#3498DB;}
+.pitch-feedback.high{color:#e74c3c;}
+.pitch-feedback.off{color:#F39C12;}
 
-  @media(max-width:600px){header{padding:60px 20px 15px;}.card{padding:20px;}.btn{padding:10px 18px;font-size:.82rem;}}
-  ::-webkit-scrollbar{width:6px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:var(--pink);border-radius:3px;}
-  body.masc ::-webkit-scrollbar-thumb{background:var(--masc-steel);}
+/* TYPE MODE */
+.typing-section{display:none;}
+.typing-section.visible{display:block;}
+.type-prompt{font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(1.05rem,2.5vw,1.5rem);color:var(--text-dark);text-align:center;margin-bottom:14px;padding:0 20px;opacity:.75;animation:fadeUp .55s ease;}
+.typing-input{width:100%;padding:14px 18px;border-radius:16px;border:2px solid var(--pink);background:rgba(255,255,255,.88);font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--text-dark);outline:none;transition:all .3s;resize:none;min-height:56px;overflow:hidden;}
+.typing-input:focus{border-color:var(--hot-pink);box-shadow:0 0 0 4px rgba(255,20,147,.1);}
+body.masc .typing-input{background:rgba(15,30,50,.9);border-color:var(--masc-steel);color:var(--text-dark);}
+.type-feedback{text-align:center;margin-top:10px;font-weight:700;font-size:.98rem;min-height:24px;transition:all .3s;}
+.type-feedback.correct{color:#2ECC71;}
+.type-feedback.close{color:#F4C430;}
+.type-feedback.wrong{color:var(--hot-pink);}
+
+/* AFFIRMATION */
+.affirmation-box{background:linear-gradient(135deg,rgba(255,20,147,.07),rgba(232,180,255,.1));border-left:4px solid var(--pink);border-radius:0 16px 16px 0;padding:16px 46px 16px 20px;font-style:italic;font-family:'Playfair Display',serif;color:var(--text-mid);font-size:.92rem;line-height:1.75;position:relative;overflow:hidden;margin-top:20px;}
+body.masc .affirmation-box{background:linear-gradient(135deg,rgba(46,109,164,.1),rgba(0,0,0,.08));border-left-color:var(--masc-steel);color:var(--masc-silver);}
+.affirmation-box::before{content:'💭';font-size:2.2rem;position:absolute;right:14px;top:50%;transform:translateY(-50%);opacity:.12;}
+body.masc .affirmation-box::before{content:'🧠';}
+
+/* PSYCH */
+.psych-card{background:rgba(255,255,255,.5);border-radius:16px;padding:18px 22px;margin-bottom:14px;border:1px solid rgba(255,105,180,.14);}
+body.masc .psych-card{background:rgba(15,30,50,.6);border-color:rgba(46,109,164,.2);}
+.psych-card h4{font-family:'Playfair Display',serif;color:var(--hot-pink);font-size:1rem;margin-bottom:8px;display:flex;align-items:center;gap:8px;}
+body.masc .psych-card h4{color:var(--masc-gold);}
+.psych-card p{font-size:.87rem;line-height:1.72;color:var(--text-mid);}
+body.masc .psych-card p{color:var(--masc-silver);}
+
+/* MANAGE */
+.admin-section{display:none;}
+.admin-section.visible{display:block;}
+.form-group{margin-bottom:14px;}
+.form-group label{display:block;font-size:.77rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-mid);margin-bottom:6px;}
+.form-group input,.form-group textarea,.form-group select.form-input{width:100%;padding:11px 14px;border-radius:12px;border:2px solid rgba(255,105,180,.28);background:rgba(255,255,255,.88);font-family:'Nunito',sans-serif;font-size:.9rem;color:var(--text-dark);outline:none;transition:all .2s;appearance:auto;}
+.form-group input:focus,.form-group textarea:focus{border-color:var(--pink);box-shadow:0 0 0 3px rgba(255,105,180,.1);}
+body.masc .form-group input,body.masc .form-group textarea,body.masc .form-group select.form-input{background:rgba(15,30,50,.9);border-color:rgba(46,109,164,.3);color:var(--text-dark);}
+.form-group textarea{min-height:80px;resize:vertical;}
+.hint-text{font-size:.73rem;color:var(--text-mid);opacity:.68;line-height:1.5;}
+
+/* STATUS BANNER */
+.status-banner{padding:10px 16px;border-radius:12px;font-size:.82rem;font-weight:600;margin-bottom:14px;display:none;}
+.status-banner.info{background:rgba(52,152,219,.12);color:#2980b9;border:1px solid rgba(52,152,219,.25);}
+.status-banner.success{background:rgba(46,204,113,.1);color:#27ae60;border:1px solid rgba(46,204,113,.2);}
+.status-banner.error{background:rgba(231,76,60,.1);color:#c0392b;border:1px solid rgba(231,76,60,.2);}
+.status-banner.show{display:block;}
+
+/* TOAST */
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--hot-pink);color:white;padding:13px 28px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.87rem;z-index:1000;opacity:0;transition:all .4s cubic-bezier(.34,1.56,.64,1);pointer-events:none;box-shadow:0 8px 30px rgba(255,20,147,.4);}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+body.masc .toast{background:var(--masc-steel);box-shadow:0 8px 30px rgba(46,109,164,.4);}
+
+/* CELEBRATION */
+.celebration{position:fixed;inset:0;z-index:200;pointer-events:none;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .3s;}
+.celebration.show{opacity:1;}
+.celebration-text{font-family:'Dancing Script',cursive;font-size:clamp(2.5rem,8vw,5rem);background:linear-gradient(135deg,var(--hot-pink),var(--lavender),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:celebPop 1s ease;filter:drop-shadow(0 4px 20px var(--shadow));}
+@keyframes celebPop{0%{transform:scale(.5) rotate(-5deg);}60%{transform:scale(1.15) rotate(3deg);}100%{transform:scale(1) rotate(0deg);}}
+
+@media(max-width:600px){header{padding:60px 20px 15px;}.card{padding:20px;}.btn{padding:10px 18px;font-size:.82rem;}.voice-controls-row{gap:10px;}}
+::-webkit-scrollbar{width:6px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:var(--pink);border-radius:3px;}
+body.masc ::-webkit-scrollbar-thumb{background:var(--masc-steel);}
 </style>
 </head>
 <body id="appBody">
@@ -190,6 +264,7 @@
   <!-- SELECT CARD -->
   <div class="card">
     <div class="section-title" id="selectTitle">🌸 Choose Your Mantra</div>
+    <div id="loadBanner" class="status-banner"></div>
     <div class="tag-search-wrap">
       <span class="tag-search-icon">🔍</span>
       <input type="text" class="tag-search-input" id="tagSearchInput"
@@ -198,19 +273,17 @@
     </div>
     <div id="tagMatchDisplay" class="tag-match-display"></div>
     <p class="tag-hint">Type a tag to filter · leave blank to see all</p>
-
     <div class="mantra-select-wrap">
       <select id="mantraSelect" onchange="selectMantra(this.value)">
-        <option value="">— Select a mantra —</option>
+        <option value="">— Loading mantras… —</option>
       </select>
       <button class="btn btn-primary" onclick="randomMantra()">🎲 Random</button>
     </div>
-
     <div class="repeat-row">
       <span class="repeat-label">🔁 Repeats</span>
       <input type="text" class="repeat-input" id="repeatInput" value="3" placeholder="3 or –" oninput="onRepeatChange()">
       <span class="repeat-badge" id="repeatBadge" style="display:none;"></span>
-      <span class="repeat-hint">Number, or <strong>–</strong> for infinite ∞</span>
+      <span class="repeat-hint">Number, or <strong>–</strong> for ∞ infinite</span>
     </div>
   </div>
 
@@ -235,6 +308,55 @@
         <button class="btn btn-primary" onclick="nextSentence()" id="nextBtn">Next →</button>
         <button class="btn btn-secondary" onclick="doRepeat()" id="repeatBtn" style="display:none;">🔄 Again</button>
       </div>
+
+      <!-- VOICE PANEL -->
+      <div class="voice-panel" id="voicePanel">
+        <div class="voice-header" onclick="toggleVoicePanel()">
+          <div class="voice-header-left">
+            🎙️ <span id="voiceHeaderLabel">Voice Listening</span>
+          </div>
+          <div class="voice-header-right">
+            <!-- Pitch match toggle -->
+            <div class="pitch-toggle-wrap" onclick="event.stopPropagation()">
+              <span id="pitchToggleLabel">🎵 Voice Match</span>
+              <label class="mini-toggle">
+                <input type="checkbox" id="pitchMatchToggle" onchange="onPitchMatchToggle()">
+                <div class="mini-track"></div>
+                <div class="mini-thumb"></div>
+              </label>
+            </div>
+            <!-- Main mic toggle -->
+            <button class="btn btn-sm btn-primary" id="micToggleBtn" onclick="event.stopPropagation();toggleMic()">🎙 Start Listening</button>
+          </div>
+        </div>
+        <div class="voice-body" id="voiceBody">
+          <div class="voice-controls-row">
+            <div class="voice-setting">
+              <span>⏱ Pause Timer</span>
+              <input type="number" id="pauseTimer" value="3" min="1" max="10" step="0.5" title="Seconds of silence before auto-advancing">
+              <span>sec</span>
+            </div>
+            <div style="font-size:.74rem;color:var(--text-mid);opacity:.7;max-width:300px;">
+              Say the mantra line aloud. After <strong id="timerPreview">3</strong> seconds of silence, it advances automatically.
+            </div>
+          </div>
+          <div class="voice-status-bar">
+            <div class="mic-indicator" id="micIndicator"></div>
+            <div class="voice-status-text" id="voiceStatusText">Click "Start Listening" to activate your microphone.</div>
+            <div class="voice-countdown" id="voiceCountdown"></div>
+          </div>
+          <!-- Pitch meter (shown when voice match is on) -->
+          <div class="pitch-meter-wrap" id="pitchMeterWrap" style="display:none;">
+            <div class="pitch-meter-label" id="pitchMeterLabel">Voice Pitch</div>
+            <div class="pitch-bar-track">
+              <div class="pitch-bar-fill" id="pitchBarFill" style="width:0%"></div>
+              <div class="pitch-zone-marker" id="pitchZoneLow" style="left:0%"></div>
+              <div class="pitch-zone-marker" id="pitchZoneHigh" style="left:100%"></div>
+            </div>
+            <div class="pitch-feedback" id="pitchFeedback"></div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- TYPE IT -->
@@ -256,31 +378,30 @@
   <!-- PSYCH CARD -->
   <div class="card" id="psychCard" style="display:none;">
     <div class="section-title" id="psychTitle">🧠 Why This Works</div>
-    <div class="psych-card"><h4>🔁 Repetition Rewires Neural Pathways</h4><p>Each repetition of a mantra strengthens the neural connections associated with that belief. Neuroplasticity — the brain's ability to rewire itself — means that with repeated activation, those circuits become faster, stronger, and more automatic. Neurons that fire together, wire together. This is why the repeat counter matters: every pass deepens the groove.</p></div>
-    <div class="psych-card"><h4>💡 The Subconscious Doesn't Judge</h4><p>Your subconscious mind accepts repeated statements as fact without critique. By affirming a belief consistently — especially with emotion — you bypass rational doubt and install the belief at an identity level. This is the core mechanism behind self-hypnosis, NLP, and affirmation-based therapy. Your critical faculty lowers with repetition and relaxation.</p></div>
-    <div class="psych-card"><h4>🌊 Emotion Amplifies Absorption</h4><p>Emotional arousal signals your brain that something is important, encoding it more deeply. The more feeling you bring to a mantra, the more powerfully it lands in the subconscious. Don't just say the words — feel them in your body as if they are already true right now. Your nervous system responds to imagination as well as reality.</p></div>
-    <div class="psych-card"><h4>🪞 Identity-Based Affirmation</h4><p>"I am" statements are especially powerful because they anchor belief at the identity level. You're not describing a behavior — you're declaring who you ARE. Every repetition is a vote cast for the person you're choosing to become. Your brain will begin to find confirming evidence for the identity you declare, creating a self-fulfilling loop.</p></div>
-    <div class="psych-card"><h4>🧘 Theta State &amp; Receptivity</h4><p>Your brain enters theta wave states during deep relaxation (just before sleep, during meditation, or in flow). In theta, the subconscious is maximally receptive to new belief installation. Relaxing your body before practice, slowing your breath, and softening your focus all increase receptivity — moving you closer to that suggestible state where mantras land deepest.</p></div>
-    <div class="psych-card"><h4>⏰ Consistency Over Intensity</h4><p>Daily repetition — even 5–10 minutes — outperforms occasional long sessions. The subconscious updates gradually through consistent doses. The priming phrases above your mantra are drawn from NLP and hypnotic language research — they prime your mind to receive, lower resistance, and amplify absorption before each sentence lands.</p></div>
+    <div class="psych-card"><h4>🔁 Repetition Rewires Neural Pathways</h4><p>Each repetition of a mantra strengthens the neural connections associated with that belief. Neuroplasticity means that with repeated activation, those circuits become faster, stronger, and more automatic. Neurons that fire together, wire together. Every pass deepens the groove.</p></div>
+    <div class="psych-card"><h4>💡 The Subconscious Doesn't Judge</h4><p>Your subconscious mind accepts repeated statements as fact without critique. By affirming a belief consistently — especially with emotion — you bypass rational doubt and install the belief at an identity level. This is the core mechanism behind self-hypnosis, NLP, and affirmation-based therapy.</p></div>
+    <div class="psych-card"><h4>🌊 Emotion Amplifies Absorption</h4><p>Emotional arousal signals your brain that something is important, encoding it more deeply. The more feeling you bring to a mantra, the more powerfully it lands. Don't just say the words — feel them in your body as if they are already true right now.</p></div>
+    <div class="psych-card"><h4>🪞 Identity-Based Affirmation</h4><p>"I am" statements anchor belief at the identity level. You're not describing a behavior — you're declaring who you ARE. Every repetition is a vote for the person you're choosing to become. Your brain will begin finding confirming evidence for the identity you declare.</p></div>
+    <div class="psych-card"><h4>🧘 Theta State &amp; Receptivity</h4><p>Your brain enters theta wave states during deep relaxation. In theta, the subconscious is maximally receptive to new belief installation. Slow your breath, relax your body, and soften your focus before practicing — this moves you toward the suggestible state where mantras land deepest.</p></div>
+    <div class="psych-card"><h4>🎙️ Voice & Embodiment</h4><p>Speaking a mantra aloud activates more of your brain than reading silently — motor cortex, auditory cortex, and language centers all engage simultaneously. Hearing your own voice say the words adds a powerful feedback loop. The voice pitch matching feature helps train your vocal expression to match the identity you're building.</p></div>
   </div>
 
   <!-- MANAGE CARD -->
   <div class="card">
     <div class="section-title">📂 Manage Mantras</div>
-    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:14px;">
-      <button class="btn btn-secondary" onclick="document.getElementById('xlsxImport').click()">📥 Load Excel</button>
-      <input type="file" id="xlsxImport" accept=".xlsx,.xls" style="display:none;" onchange="importExcel(event)">
-      <button class="btn btn-secondary" onclick="exportExcel()">📤 Save Excel</button>
-      <button class="btn btn-secondary" onclick="toggleAdmin()">➕ Add Mantra</button>
-    </div>
-    <p class="hint-text">Place <strong>mantras.xlsx</strong> in the same GitHub folder as index.html. Click <em>Load Excel</em> to import. Sentences in Excel are separated by <strong>|</strong> pipes within a cell. Click <em>Save Excel</em> to download an updated copy to re-upload.</p>
+    <p class="hint-text" style="margin-bottom:14px;">Mantras are loaded automatically from <strong>mantras.xlsx</strong> in the same GitHub folder as this page. To add new mantras, use the form below — then click <em>Download Updated Excel</em> and commit that file back to your repo.</p>
+    <button class="btn btn-secondary" onclick="toggleAdmin()">➕ Add New Mantra</button>
     <div class="admin-section" id="adminSection">
       <hr style="margin:20px 0;border:none;border-top:1px solid rgba(255,105,180,.18);">
       <div class="form-group"><label>Mantra Title</label><input type="text" id="newTitle" placeholder="e.g. I Am Radiant"></div>
       <div class="form-group"><label>Sentences <span style="opacity:.5;font-weight:400;">(one per line)</span></label><textarea id="newSentences" placeholder="I am radiant and beautiful.&#10;My light shines brightly.&#10;I attract good things."></textarea></div>
       <div class="form-group"><label>Tag</label><input type="text" id="newTag" placeholder="e.g. confidence, self-love, abundance"></div>
       <div class="form-group"><label>Gender</label><select class="form-input" id="newGender"><option value="both">Both</option><option value="feminine">Feminine</option><option value="masculine">Masculine</option></select></div>
-      <button class="btn btn-primary" onclick="addMantra()" style="width:100%;">💖 Add Mantra</button>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:6px;">
+        <button class="btn btn-primary" onclick="addMantra()" style="flex:1;">💖 Add to List</button>
+        <button class="btn btn-secondary" onclick="downloadUpdatedExcel()" style="flex:1;">📥 Download Updated Excel</button>
+      </div>
+      <p class="hint-text" style="margin-top:10px;">After downloading, commit <strong>mantras.xlsx</strong> to your GitHub repo to make it permanent.</p>
     </div>
   </div>
 
@@ -289,185 +410,30 @@
 <div class="celebration" id="celebration"><div class="celebration-text" id="celebText">✨ Beautiful! ✨</div></div>
 
 <script>
-// ══════════════════════════════════════════
-//  PRIMING PHRASES — 200+ entries
-// ══════════════════════════════════════════
+// ══════════════════════════════════════════════════════
+//  PRIMING PHRASES
+// ══════════════════════════════════════════════════════
 const PRIMING_FEM = [
-  // Permissive / softening (opening the door)
-  "Let this land gently…","Allow yourself to receive…","You're safe to believe this…",
-  "Soften and receive…","It's okay to let this in…","Open just a little more…",
-  "Your heart already knows this…","Release any resistance…","Let your guard down for a moment…",
-  "Breathe in — and receive…","You deserve to hear this…","Simply allow…",
-  "No proof needed — just feel it…","Trust the process…","Something in you already agrees…",
-  "You can let this be easy…","Resistance is optional — release it now…","You are open and receptive…",
-  "Let the walls come down for a moment…","Soften your mind and receive…",
-
-  // Identity anchoring (who you ARE)
-  "This is who you are becoming…","Claim this as yours…","This is already true at your core…",
-  "You are updating your identity…","This is your new normal…","Write this over the old story…",
-  "Feel this as fact…","Let this become you…","This is the real you speaking…",
-  "Your subconscious is listening…","Your future self already lives this…","This is who you choose to be…",
-  "Install this now…","This is your foundation…","Your cells are listening…",
-  "This truth was always inside you…","You are reclaiming what was always yours…",
-  "This is who she is — and she is you…","Speak as your highest self…",
-  "You are not pretending — you are remembering…",
-
-  // Emotional activation (feel it)
-  "Feel the truth of these words…","Let emotion amplify this…","Say it like you mean it…",
-  "Smile as you say this…","Feel it in your body…","Let warmth rise in your chest…",
-  "Breathe life into these words…","Speak with your whole heart…","Feel it light you up…",
-  "Let joy meet these words…","Let these words wrap around you…","Feel this dissolving doubt…",
-  "Let your nervous system settle into this…","Feel the peace in believing…","Let this feel like home…",
-  "Let your heart say yes…","Feel a wave of calm as this lands…","Say it with love for yourself…",
-  "Let yourself smile — you deserve this…","Feel it the way you'd feel it if it were already done…",
-
-  // Neuroplasticity / science
-  "Your brain is rewiring right now…","Neural pathways are forming…","Repetition is medicine…",
-  "Every word is a vote for your new self…","You are programming your subconscious…",
-  "Theta waves are opening your mind…","Your neurons are firing and wiring…",
-  "Each repetition deepens the groove…","Your brain believes what you repeat…",
-  "You are in a light trance right now…","Relaxation increases receptivity…",
-  "The more you say it, the truer it becomes…","Your subconscious is absorbing this…",
-  "Repetition bypasses doubt…","You are installing a new belief…",
-  "The subconscious can't distinguish imagination from repeated reality…",
-  "Right now your limbic system is encoding this as true…",
-  "Every pass plants this deeper into long-term memory…",
-  "Your default mode network is updating…","Dopamine rewards you for believing this…",
-
-  // Hypnotic / NLP (Milton Model — artful vagueness)
-  "As you read this, something shifts…","With each word, you believe a little more…",
-  "You might notice a sense of ease…","Perhaps you can feel this already…",
-  "Something inside you is saying yes…","As you breathe out, let the doubt leave…",
-  "You don't have to try — just receive…","In this moment, this is completely true…",
-  "Your body already knows how to believe this…","The more you relax, the easier this lands…",
-  "Curiosity, not effort — just let it in…","You may be surprised how real this feels…",
-  "Something deeper than your mind is accepting this…","You are more receptive than you know…",
-  "Gently, effortlessly, this becomes yours…","You may find yourself nodding…",
-  "Notice how natural this feels to say…","As you breathe, this truth settles in…",
-  "Perhaps a part of you has always known this…","And with each breath, it goes a little deeper…",
-
-  // Self-compassion / worthiness
-  "You are allowed to believe this…","You've earned this truth…","This is not arrogance — it's truth…",
-  "Loving yourself is not selfish…","You were always worthy…","Let yourself be seen as this…",
-  "This is your birthright…","You don't have to earn this — it's already yours…",
-  "Say it for the girl who didn't believe it yet…","Give yourself permission…",
-  "You are safe to shine…","You are allowed to take up space…",
-  "No apologies — just truth…","Receive this with grace…","You matter. Full stop.",
-  "You have always deserved this — you just forgot…","She who believes it, becomes it…",
-  "The world needs you to believe this about yourself…",
-  "Your worth is not negotiable — claim it…","Be as kind to yourself as you are to others…",
-
-  // Visualization cues
-  "Picture yourself living this truth…","See your future self nodding…",
-  "Imagine this already installed deep within…","Visualize it as real…",
-  "See it. Feel it. Believe it…","Picture this written on your heart…",
-  "See the version of you who has always known this…","Hold this image in your mind…",
-  "Your mind's eye sees her — the version of you who lives this…","See it done…",
-  "Imagine looking in the mirror and knowing this is true…",
-  "Visualize your subconscious receiving and filing this away as fact…",
-
-  // Playful / bimbo-coded / confident
-  "Obsessed with this version of you…","Main character energy…","Glowing up in real time…",
-  "She believed it, so it became true…","That girl? It's you…","Serving truth and she knows it…",
-  "Confidence unlocked…","This is your era…","Soft, powerful, and knowing it…",
-  "Living in her truth and it shows…","That radiant version of you? This is her…",
-  "She woke up and chose to know her worth…","Magnetic. Always was…",
-  "Unapologetically herself…","The glow-up was internal…",
-  "That soft, certain energy? Right here, right now…","She said it once — and meant it every time…",
-  "Darling, you are the main event…","She's that girl and she knows it…",
-
-  // Somatic / breath
-  "Take one slow breath in…","Let your shoulders drop…","Relax your jaw as you say this…",
-  "Breathe into your heart as you read…","Feel your feet on the ground…",
-  "Ground and receive…","Soften your belly, open your heart…",
-  "Slow exhale — let resistance out…","Let your whole body say yes…","Breathe this in deeply…",
-  "Feel the weight of your body — you are held and safe…",
-  "Relax your hands — there is nothing to grip onto but this truth…",
-  "Three breaths of openness, then receive this…","Let your body be the first to believe…",
-
-  // Repetition priming
-  "Say it again — and mean it more…","One more time, with feeling…","Again, and let it land deeper…",
-  "Repetition is the key — keep going…","The tenth time lands deeper than the first…",
-  "Let it go deeper with each pass…","Sinking in a little more each time…",
-  "You're closer with every repetition…","Keep going — the subconscious is listening…",
-  "Each pass plants the seed deeper…","The groove is forming — stay with it…",
-  "Every repetition is a deposit into your new identity…",
-  "Your subconscious is taking notes — say it with conviction…",
+  "Let this land gently…","Allow yourself to receive…","You're safe to believe this…","Soften and receive…","It's okay to let this in…","Open just a little more…","Your heart already knows this…","Release any resistance…","Let your guard down for a moment…","Breathe in — and receive…","You deserve to hear this…","Simply allow…","No proof needed — just feel it…","Trust the process…","Something in you already agrees…","You can let this be easy…","Resistance is optional — release it now…","You are open and receptive…","Let the walls come down for a moment…","Soften your mind and receive…",
+  "This is who you are becoming…","Claim this as yours…","This is already true at your core…","You are updating your identity…","This is your new normal…","Write this over the old story…","Feel this as fact…","Let this become you…","This is the real you speaking…","Your subconscious is listening…","Your future self already lives this…","This is who you choose to be…","Install this now…","This is your foundation…","Your cells are listening…","This truth was always inside you…","You are reclaiming what was always yours…","This is who she is — and she is you…","Speak as your highest self…","You are not pretending — you are remembering…",
+  "Feel the truth of these words…","Let emotion amplify this…","Say it like you mean it…","Smile as you say this…","Feel it in your body…","Let warmth rise in your chest…","Breathe life into these words…","Speak with your whole heart…","Feel it light you up…","Let joy meet these words…","Feel this dissolving doubt…","Let your nervous system settle into this…","Feel the peace in believing…","Let this feel like home…","Let your heart say yes…","Feel a wave of calm as this lands…","Say it with love for yourself…","Let yourself smile — you deserve this…","Feel it the way you'd feel it if it were already done…",
+  "Your brain is rewiring right now…","Neural pathways are forming…","Repetition is medicine…","Every word is a vote for your new self…","You are programming your subconscious…","Theta waves are opening your mind…","Your neurons are firing and wiring…","Each repetition deepens the groove…","Your brain believes what you repeat…","You are in a light trance right now…","Relaxation increases receptivity…","The more you say it, the truer it becomes…","Your subconscious is absorbing this…","Repetition bypasses doubt…","You are installing a new belief…","Right now your limbic system is encoding this as true…","Every pass plants this deeper into long-term memory…","Dopamine rewards you for believing this…",
+  "As you read this, something shifts…","With each word, you believe a little more…","You might notice a sense of ease…","Perhaps you can feel this already…","Something inside you is saying yes…","As you breathe out, let the doubt leave…","You don't have to try — just receive…","In this moment, this is completely true…","Your body already knows how to believe this…","The more you relax, the easier this lands…","Curiosity, not effort — just let it in…","You may be surprised how real this feels…","Something deeper than your mind is accepting this…","You are more receptive than you know…","Gently, effortlessly, this becomes yours…","Notice how natural this feels to say…","As you breathe, this truth settles in…","Perhaps a part of you has always known this…","And with each breath, it goes a little deeper…",
+  "You are allowed to believe this…","You've earned this truth…","This is not arrogance — it's truth…","Loving yourself is not selfish…","You were always worthy…","Let yourself be seen as this…","This is your birthright…","You don't have to earn this — it's already yours…","Say it for the girl who didn't believe it yet…","Give yourself permission…","You are safe to shine…","You are allowed to take up space…","No apologies — just truth…","Receive this with grace…","You matter. Full stop.","She who believes it, becomes it…","The world needs you to believe this about yourself…","Your worth is not negotiable — claim it…",
+  "Picture yourself living this truth…","See your future self nodding…","Imagine this already installed deep within…","Visualize it as real…","See it. Feel it. Believe it…","Picture this written on your heart…","See the version of you who has always known this…","Hold this image in your mind…","Your mind's eye sees her — the version of you who lives this…","See it done…","Imagine looking in the mirror and knowing this is true…",
+  "Obsessed with this version of you…","Main character energy…","Glowing up in real time…","She believed it, so it became true…","That girl? It's you…","Serving truth and she knows it…","Confidence unlocked…","This is your era…","Soft, powerful, and knowing it…","Living in her truth and it shows…","That radiant version of you? This is her…","She woke up and chose to know her worth…","Magnetic. Always was…","Unapologetically herself…","The glow-up was internal…","Darling, you are the main event…","She's that girl and she knows it…",
+  "Take one slow breath in…","Let your shoulders drop…","Relax your jaw as you say this…","Breathe into your heart as you read…","Feel your feet on the ground…","Ground and receive…","Soften your belly, open your heart…","Slow exhale — let resistance out…","Let your whole body say yes…","Breathe this in deeply…","Feel the weight of your body — you are held and safe…","Relax your hands — there is nothing to grip onto but this truth…",
+  "Say it again — and mean it more…","One more time, with feeling…","Again, and let it land deeper…","Repetition is the key — keep going…","The tenth time lands deeper than the first…","Let it go deeper with each pass…","Sinking in a little more each time…","You're closer with every repetition…","Keep going — the subconscious is listening…","Each pass plants the seed deeper…","The groove is forming — stay with it…","Every repetition is a deposit into your new identity…",
 ];
-
 const PRIMING_MASC = [
-  "Lock this in…","State it with authority…","Own this completely…",
-  "Your mind is being programmed — stay present…","Speak it like law…",
-  "No hesitation. Commit to this…","Discipline starts in the mind…",
-  "Your subconscious is updating now…","Repetition forges identity…",
-  "Install this at the core…","Say it like you've already lived it…",
-  "Neural pathways forming — keep going…","You are reprogramming yourself…",
-  "This is foundation work…","Believe it first — the world follows…",
-  "Identity before evidence…","Every rep counts…","Say it with conviction…",
-  "Consistency over intensity — show up…","This becomes who you are…",
-  "Steady. Grounded. Certain…","Your word creates your world…",
-  "Declare it…","No doubt — just statement…","This is already true in your nervous system…",
-  "Focus here…","Present. Committed. Receiving…","Let this settle into your bones…",
-  "You are choosing your identity right now…","The body hears what the mind repeats…",
-  "Build the belief with reps…","This is mental training…","Stay with it…",
-  "Theta state — maximum receptivity…","Your subconscious doesn't debate — it accepts…",
-  "Every repetition is a deposit…","The work is invisible but real…",
-  "Grounded. Certain. Decided…","Anchor this now…","Feel it as done…",
-  "A man's inner world creates his outer world — choose deliberately…",
-  "Say this the way you'd tell someone an unchangeable fact…",
-  "Calm certainty. No performance needed…","Breathe. Ground. Receive…",
-  "This is who you are — not who you're trying to be…",
+  "Lock this in…","State it with authority…","Own this completely…","Your mind is being programmed — stay present…","Speak it like law…","No hesitation. Commit to this…","Discipline starts in the mind…","Your subconscious is updating now…","Repetition forges identity…","Install this at the core…","Say it like you've already lived it…","Neural pathways forming — keep going…","You are reprogramming yourself…","This is foundation work…","Believe it first — the world follows…","Identity before evidence…","Every rep counts…","Say it with conviction…","Consistency over intensity — show up…","This becomes who you are…","Steady. Grounded. Certain…","Your word creates your world…","Declare it…","No doubt — just statement…","This is already true in your nervous system…","Focus here…","Present. Committed. Receiving…","Let this settle into your bones…","You are choosing your identity right now…","The body hears what the mind repeats…","Build the belief with reps…","This is mental training…","Stay with it…","Theta state — maximum receptivity…","Your subconscious doesn't debate — it accepts…","Every repetition is a deposit…","The work is invisible but real…","Grounded. Certain. Decided…","Anchor this now…","Feel it as done…","A man's inner world creates his outer world — choose deliberately…","Calm certainty. No performance needed…","Breathe. Ground. Receive…","This is who you are — not who you're trying to be…",
 ];
+const AFFIRMATIONS = ["Say this slowly. Let each word settle into your heart.","Take a deep breath. Feel the truth of these words in your body.","You are not just saying words — you are speaking your future into existence.","Let your subconscious hear this. Say it with full belief.","Your brain is literally rewiring right now. Keep going.","Feel it as if it's already true. Because deep down, it is.","Repetition is the mother of belief. Stay with it.","Say it again and mean it. You are becoming this.","This isn't wishful thinking — this is identity work. You're doing great.","Every word is a vote for the person you're choosing to become.","The subconscious does not distinguish between imagination and repeated reality.","You are planting seeds. Trust the process — they will grow.","Speak this from your future self, not your doubting self.","Emotion amplifies absorption. Let yourself feel this.","You deserve to believe this about yourself. Let it in.","Your nervous system is learning a new baseline right now.","Don't just recite — embody. Feel the truth in your posture.","The resistance you feel is old programming. You are choosing new programming.","Breathe into any discomfort. That's where the rewiring happens.","Consistency is the magic. Come back tomorrow and the day after."];
+const AFFIRMATIONS_MASC = ["Say this with conviction. Own every word.","Breathe. Centre yourself. These words are your foundation.","Your mind is a machine. Program it deliberately.","Consistency forges character. Keep going.","Your nervous system is listening. Speak with authority.","Discipline begins in the mind. Repeat with intent.","Mental reps build mental muscle. Stay with it.","Every repetition strengthens the neural path to this belief.","You are defining yourself with every word. Choose well.","Strong men shape their minds as they shape their bodies — with work.","Identity before evidence. Declare it first.","The body follows the mind. Program the mind first.","Repetition is not weakness — it is mastery.","Your subconscious does not argue. It accepts what you repeat.","Stay consistent. The compound effect is invisible until it isn't.","This is inner work. It is the most important work.","Certainty is built through repetition. Keep building.","The man you want to become is built one belief at a time."];
 
-// ══════════════════════════════════════════
-//  AFFIRMATIONS
-// ══════════════════════════════════════════
-const AFFIRMATIONS = [
-  "Say this slowly. Let each word settle into your heart.",
-  "Take a deep breath. Feel the truth of these words in your body.",
-  "You are not just saying words — you are speaking your future into existence.",
-  "Let your subconscious hear this. Say it with full belief.",
-  "Your brain is literally rewiring right now. Keep going.",
-  "Feel it as if it's already true. Because deep down, it is.",
-  "Repetition is the mother of belief. Stay with it.",
-  "Say it again and mean it. You are becoming this.",
-  "This isn't wishful thinking — this is identity work. You're doing great.",
-  "Every word is a vote for the person you're choosing to become.",
-  "The subconscious does not distinguish between imagination and repeated reality.",
-  "You are planting seeds. Trust the process — they will grow.",
-  "Speak this from your future self, not your doubting self.",
-  "Emotion amplifies absorption. Let yourself feel this.",
-  "You deserve to believe this about yourself. Let it in.",
-  "Your nervous system is learning a new baseline right now.",
-  "Don't just recite — embody. Feel the truth in your posture.",
-  "The resistance you feel is old programming. You are choosing new programming.",
-  "Breathe into any discomfort. That's where the rewiring happens.",
-  "Consistency is the magic. Come back tomorrow and the day after.",
-];
-const AFFIRMATIONS_MASC = [
-  "Say this with conviction. Own every word.",
-  "Breathe. Centre yourself. These words are your foundation.",
-  "Your mind is a machine. Program it deliberately.",
-  "Consistency forges character. Keep going.",
-  "Your nervous system is listening. Speak with authority.",
-  "Discipline begins in the mind. Repeat with intent.",
-  "Mental reps build mental muscle. Stay with it.",
-  "Every repetition strengthens the neural path to this belief.",
-  "You are defining yourself with every word. Choose well.",
-  "Strong men shape their minds as they shape their bodies — with work.",
-  "Identity before evidence. Declare it first.",
-  "The body follows the mind. Program the mind first.",
-  "Repetition is not weakness — it is mastery.",
-  "Your subconscious does not argue. It accepts what you repeat.",
-  "Stay consistent. The compound effect is invisible until it isn't.",
-  "This is inner work. It is the most important work.",
-  "Certainty is built through repetition. Keep building.",
-  "The man you want to become is built one belief at a time.",
-];
-
-// ══════════════════════════════════════════
-//  DATA
-// ══════════════════════════════════════════
+// ══════════════════════════════════════════════════════
+//  DEFAULT DATA (shown while xlsx loads)
+// ══════════════════════════════════════════════════════
 let mantras = [
   {id:1,title:"I Am Enough",sentences:["I am worthy of love and belonging.","I deserve good things in my life.","My presence matters.","I am enough exactly as I am.","I embrace my authentic self."],tag:"self-love",gender:"feminine"},
   {id:2,title:"Confidence Queen",sentences:["I radiate confidence and grace.","I walk into every room owning my power.","My voice deserves to be heard.","I am magnetic and captivating.","I believe in myself completely."],tag:"confidence",gender:"feminine"},
@@ -481,355 +447,533 @@ let mantras = [
   {id:10,title:"Peace Within",sentences:["I release what no longer serves me.","I am calm and centered.","My inner peace is unshakeable.","I breathe in serenity.","I let go of worry and welcome peace."],tag:"mindfulness",gender:"both"},
 ];
 
-// ══════════════════════════════════════════
+// ══════════════════════════════════════════════════════
 //  STATE
-// ══════════════════════════════════════════
-let currentMantra = null;
-let currentSentenceIdx = 0;
-let practiceMode = 'listen';
-let isMasc = false;
-let activeTag = '';
-let adminOpen = false;
-let currentRepeat = 1;
-let primingTimer = null;
-let autoAdvanceLock = false; // prevents double-advance
+// ══════════════════════════════════════════════════════
+let currentMantra = null, currentSentenceIdx = 0;
+let practiceMode = 'listen', isMasc = false, activeTag = '';
+let adminOpen = false, currentRepeat = 1;
+let primingTimer = null, autoAdvanceLock = false;
 
-// ══════════════════════════════════════════
+// ══════════════════════════════════════════════════════
+//  VOICE STATE
+// ══════════════════════════════════════════════════════
+let audioCtx = null, analyser = null, micStream = null;
+let micActive = false, voicePanelOpen = false;
+let silenceTimer = null, silenceStart = null;
+let pitchMatchEnabled = false;
+let lastPitchHz = 0;
+let pitchAnimFrame = null;
+// Pitch zones Hz  [femMin, femMax, mascMin, mascMax]
+// Feminine speaking voice: roughly 160–320 Hz
+// Masculine speaking voice: roughly 85–180 Hz
+const PITCH_ZONES = { feminine:{min:160,max:320}, masculine:{min:85,max:180} };
+const PITCH_DISPLAY_MIN = 60, PITCH_DISPLAY_MAX = 400; // bar range
+
+// ══════════════════════════════════════════════════════
 //  INIT
-// ══════════════════════════════════════════
-window.onload = () => { createSparkles(); renderMantraSelect(); };
+// ══════════════════════════════════════════════════════
+window.onload = () => {
+  createSparkles();
+  loadExcelFromGitHub();
+  document.getElementById('pauseTimer').addEventListener('input', () => {
+    document.getElementById('timerPreview').textContent = document.getElementById('pauseTimer').value;
+  });
+};
 
-// ══════════════════════════════════════════
+// ══════════════════════════════════════════════════════
+//  AUTO-LOAD EXCEL FROM GITHUB
+// ══════════════════════════════════════════════════════
+async function loadExcelFromGitHub() {
+  const banner = document.getElementById('loadBanner');
+  banner.textContent = '⏳ Loading mantras from mantras.xlsx…';
+  banner.className = 'status-banner info show';
+  try {
+    // Fetch relative to current page — works on GitHub Pages
+    const resp = await fetch('./mantras.xlsx', {cache:'no-cache'});
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    const buf = await resp.arrayBuffer();
+    const wb = XLSX.read(buf, {type:'array'});
+    const ws = wb.Sheets[wb.SheetNames[0]];
+    const data = XLSX.utils.sheet_to_json(ws, {defval:''});
+    const imported = [];
+    data.forEach((row,i) => {
+      const title=(row.title||'').trim(), rawS=(row.sentences||'').trim();
+      if (!title||!rawS) return;
+      imported.push({id:row.id||Date.now()+i,title,sentences:rawS.split('|').map(s=>s.trim()).filter(Boolean),tag:(row.tag||'general').trim(),gender:(row.gender||'both').trim()});
+    });
+    if (imported.length) {
+      mantras = imported;
+      banner.textContent = `✅ Loaded ${imported.length} mantras from mantras.xlsx`;
+      banner.className = 'status-banner success show';
+    } else {
+      banner.textContent = '⚠️ mantras.xlsx found but contained no valid rows — using built-in mantras.';
+      banner.className = 'status-banner error show';
+    }
+  } catch(e) {
+    banner.textContent = '📝 mantras.xlsx not found on this server — using built-in mantras. Commit mantras.xlsx alongside index.html on GitHub.';
+    banner.className = 'status-banner info show';
+  }
+  setTimeout(()=>{banner.classList.remove('show');},5000);
+  renderMantraSelect();
+}
+
+// ══════════════════════════════════════════════════════
 //  SPARKLES
-// ══════════════════════════════════════════
+// ══════════════════════════════════════════════════════
 function createSparkles() {
   const c = document.getElementById('sparkleContainer');
-  ['✨','💕','🌸','💖','⭐','🦋','💫','🌷','💎','🌟'].forEach((em,i) => {
-    for (let j = 0; j < 2; j++) {
-      const el = document.createElement('div');
-      el.className = 'sparkle'; el.textContent = em;
-      el.style.cssText = `left:${Math.random()*100}vw;animation-duration:${8+Math.random()*12}s;animation-delay:${Math.random()*15}s;font-size:${0.8+Math.random()*1.2}rem`;
+  ['✨','💕','🌸','💖','⭐','🦋','💫','🌷','💎','🌟'].forEach(em => {
+    for(let j=0;j<2;j++){
+      const el=document.createElement('div'); el.className='sparkle'; el.textContent=em;
+      el.style.cssText=`left:${Math.random()*100}vw;animation-duration:${8+Math.random()*12}s;animation-delay:${Math.random()*15}s;font-size:${0.8+Math.random()*1.2}rem`;
       c.appendChild(el);
     }
   });
 }
 
-// ══════════════════════════════════════════
+// ══════════════════════════════════════════════════════
 //  MODE TOGGLE
-// ══════════════════════════════════════════
+// ══════════════════════════════════════════════════════
 function toggleMode() {
   isMasc = document.getElementById('modeToggle').checked;
-  document.getElementById('appBody').classList.toggle('masc', isMasc);
-  document.getElementById('toggleThumb').textContent = isMasc ? '💪' : '🌸';
-  document.getElementById('siteTitle').textContent     = isMasc ? '⚔️ Mantra Forge ⚔️' : '✨ Mantra Magic ✨';
-  document.getElementById('siteSubtitle').textContent  = isMasc ? 'Reprogram your mind · Build your identity · Become him' : 'Rewire your mind · Embrace your truth · Become her';
-  document.getElementById('selectTitle').textContent   = isMasc ? '⚔️ Select Your Mantra' : '🌸 Choose Your Mantra';
-  document.getElementById('practiceTitle').textContent = isMasc ? '🏋️ Training Mode' : '💫 Practice';
-  document.getElementById('psychTitle').textContent    = isMasc ? '⚙️ Why This Works' : '🧠 Why This Works';
+  document.getElementById('appBody').classList.toggle('masc',isMasc);
+  document.getElementById('toggleThumb').textContent = isMasc?'💪':'🌸';
+  document.getElementById('siteTitle').textContent     = isMasc?'⚔️ Mantra Forge ⚔️':'✨ Mantra Magic ✨';
+  document.getElementById('siteSubtitle').textContent  = isMasc?'Reprogram your mind · Build your identity · Become him':'Rewire your mind · Embrace your truth · Become her';
+  document.getElementById('selectTitle').textContent   = isMasc?'⚔️ Select Your Mantra':'🌸 Choose Your Mantra';
+  document.getElementById('practiceTitle').textContent = isMasc?'🏋️ Training Mode':'💫 Practice';
+  document.getElementById('psychTitle').textContent    = isMasc?'⚙️ Why This Works':'🧠 Why This Works';
+  updatePitchZoneMarkers();
   renderMantraSelect();
-  if (currentMantra) { showPrimingPhrase(); showAffirmation(); }
+  if(currentMantra){showPrimingPhrase();showAffirmation();}
 }
 
-// ══════════════════════════════════════════
+// ══════════════════════════════════════════════════════
 //  TAG SEARCH
-// ══════════════════════════════════════════
+// ══════════════════════════════════════════════════════
 function onTagSearch() {
   const val = document.getElementById('tagSearchInput').value.trim().toLowerCase();
   activeTag = val;
   const badge = document.getElementById('tagMatchDisplay');
-  if (val) {
-    const hits = [...new Set(mantras.map(m=>m.tag))].filter(t=>t.toLowerCase().includes(val));
-    badge.textContent = hits.length ? '🏷 ' + hits.join(', ') : '🏷 No matching tags';
-    badge.style.display = 'inline-block';
-  } else {
-    badge.style.display = 'none';
-  }
+  if(val){
+    const hits=[...new Set(mantras.map(m=>m.tag))].filter(t=>t.toLowerCase().includes(val));
+    badge.textContent = hits.length?'🏷 '+hits.join(', '):'🏷 No matching tags';
+    badge.style.display='inline-block';
+  } else { badge.style.display='none'; }
   renderMantraSelect();
 }
 
-// ══════════════════════════════════════════
+// ══════════════════════════════════════════════════════
 //  REPEAT
-// ══════════════════════════════════════════
-function getRepeatCount() {
-  const raw = document.getElementById('repeatInput').value.trim();
-  if (raw === '-' || raw === '–' || raw === '∞' || raw === '--') return Infinity;
-  const n = parseInt(raw,10);
-  return (isNaN(n)||n<1) ? 1 : n;
-}
-function onRepeatChange() { updateRepeatBadge(); }
-function updateRepeatBadge() {
-  const badge = document.getElementById('repeatBadge');
-  if (!currentMantra) { badge.style.display='none'; return; }
-  const total = getRepeatCount();
-  badge.style.display = 'inline-block';
-  badge.textContent = total===Infinity ? `∞ mode — pass ${currentRepeat}` : `Pass ${currentRepeat} of ${total}`;
+// ══════════════════════════════════════════════════════
+function getRepeatCount(){const raw=document.getElementById('repeatInput').value.trim();if(raw==='-'||raw==='–'||raw==='∞'||raw==='--')return Infinity;const n=parseInt(raw,10);return(isNaN(n)||n<1)?1:n;}
+function onRepeatChange(){updateRepeatBadge();}
+function updateRepeatBadge(){
+  const badge=document.getElementById('repeatBadge');
+  if(!currentMantra){badge.style.display='none';return;}
+  const total=getRepeatCount();
+  badge.style.display='inline-block';
+  badge.textContent=total===Infinity?`∞ mode — pass ${currentRepeat}`:`Pass ${currentRepeat} of ${total}`;
 }
 
-// ══════════════════════════════════════════
+// ══════════════════════════════════════════════════════
 //  MANTRA SELECT
-// ══════════════════════════════════════════
-function getVisibleMantras() {
-  return mantras.filter(m => {
-    const g = m.gender === 'both' || (isMasc ? m.gender==='masculine' : m.gender==='feminine');
-    const t = !activeTag || m.tag.toLowerCase().includes(activeTag);
-    return g && t;
+// ══════════════════════════════════════════════════════
+function getVisibleMantras(){
+  return mantras.filter(m=>{
+    const g=m.gender==='both'||(isMasc?m.gender==='masculine':m.gender==='feminine');
+    const t=!activeTag||m.tag.toLowerCase().includes(activeTag);
+    return g&&t;
   });
 }
-function renderMantraSelect() {
-  const sel = document.getElementById('mantraSelect');
-  const prev = sel.value;
-  sel.innerHTML = '<option value="">— Select a mantra —</option>';
-  getVisibleMantras().forEach(m => {
-    const o = document.createElement('option');
-    o.value = m.id; o.textContent = `${m.title}  [${m.tag}]`;
-    sel.appendChild(o);
+function renderMantraSelect(){
+  const sel=document.getElementById('mantraSelect');
+  const prev=sel.value;
+  sel.innerHTML='<option value="">— Select a mantra —</option>';
+  getVisibleMantras().forEach(m=>{
+    const o=document.createElement('option');
+    o.value=m.id;o.textContent=`${m.title}  [${m.tag}]`;sel.appendChild(o);
   });
-  if (prev) sel.value = prev;
+  if(prev)sel.value=prev;
 }
-function selectMantra(id) {
-  if (!id) return;
-  currentMantra = mantras.find(m=>m.id==id);
-  if (!currentMantra) return;
-  currentSentenceIdx = 0; currentRepeat = 1;
-  document.getElementById('practiceCard').style.display = 'block';
-  document.getElementById('psychCard').style.display = 'block';
-  renderSentence(); showPrimingPhrase(); showAffirmation(); updateRepeatBadge();
+function selectMantra(id){
+  if(!id)return;
+  currentMantra=mantras.find(m=>m.id==id);
+  if(!currentMantra)return;
+  currentSentenceIdx=0;currentRepeat=1;
+  document.getElementById('practiceCard').style.display='block';
+  document.getElementById('psychCard').style.display='block';
+  renderSentence();showPrimingPhrase();showAffirmation();updateRepeatBadge();
   switchPracticeMode(practiceMode);
   document.getElementById('practiceCard').scrollIntoView({behavior:'smooth',block:'start'});
 }
-function randomMantra() {
-  const v = getVisibleMantras();
-  if (!v.length) { showToast('No mantras match your filters!'); return; }
-  const m = v[Math.floor(Math.random()*v.length)];
-  document.getElementById('mantraSelect').value = m.id;
-  selectMantra(m.id);
+function randomMantra(){
+  const v=getVisibleMantras();if(!v.length){showToast('No mantras match your filters!');return;}
+  const m=v[Math.floor(Math.random()*v.length)];
+  document.getElementById('mantraSelect').value=m.id;selectMantra(m.id);
 }
 
-// ══════════════════════════════════════════
-//  PRIMING PHRASE ROTATOR
-// ══════════════════════════════════════════
-function showPrimingPhrase() {
-  if (primingTimer) clearTimeout(primingTimer);
-  const pool = isMasc ? PRIMING_MASC : PRIMING_FEM;
-  const phrase = pool[Math.floor(Math.random()*pool.length)];
-  ['primingPhrase','primingPhraseType'].forEach(id => {
-    const el = document.getElementById(id);
-    if (!el) return;
+// ══════════════════════════════════════════════════════
+//  PRIMING PHRASE
+// ══════════════════════════════════════════════════════
+function showPrimingPhrase(){
+  if(primingTimer)clearTimeout(primingTimer);
+  const pool=isMasc?PRIMING_MASC:PRIMING_FEM;
+  const phrase=pool[Math.floor(Math.random()*pool.length)];
+  ['primingPhrase','primingPhraseType'].forEach(id=>{
+    const el=document.getElementById(id);if(!el)return;
     el.classList.remove('show');
-    setTimeout(() => { el.textContent = phrase; el.classList.add('show'); }, 180);
+    setTimeout(()=>{el.textContent=phrase;el.classList.add('show');},180);
   });
-  primingTimer = setTimeout(showPrimingPhrase, 5000);
+  primingTimer=setTimeout(showPrimingPhrase,5000);
 }
 
-// ══════════════════════════════════════════
+// ══════════════════════════════════════════════════════
 //  RENDER SENTENCE
-// ══════════════════════════════════════════
-function renderSentence() {
-  if (!currentMantra) return;
-  autoAdvanceLock = false;
-  const ss = currentMantra.sentences;
-  const s  = ss[currentSentenceIdx];
-
-  document.getElementById('currentMantraTitle').textContent = currentMantra.title;
-
-  const disp = document.getElementById('sentenceDisplay');
-  disp.style.animation='none'; void disp.offsetWidth; disp.style.animation='fadeUp .55s ease';
-  disp.textContent = s;
-
-  const tp = document.getElementById('typePrompt');
-  tp.style.animation='none'; void tp.offsetWidth; tp.style.animation='fadeUp .55s ease';
-  tp.textContent = s;
-  document.getElementById('typingInput').value = '';
-  document.getElementById('typeFeedback').textContent = '';
-  document.getElementById('typeFeedback').className = 'type-feedback';
-
-  // Dots
-  const dotsEl = document.getElementById('progressDots');
-  dotsEl.innerHTML = '';
-  ss.forEach((_,i) => {
-    const d = document.createElement('div');
-    d.className = 'dot'+(i===currentSentenceIdx?' active':(i<currentSentenceIdx?' done':''));
-    dotsEl.appendChild(d);
-  });
-
-  const isLast = currentSentenceIdx === ss.length - 1;
-  document.getElementById('nextBtn').style.display   = isLast ? 'none' : 'inline-flex';
-  document.getElementById('repeatBtn').style.display = isLast ? 'inline-flex' : 'none';
-  if (isLast) {
-    const total = getRepeatCount();
-    document.getElementById('repeatBtn').textContent =
-      (total===Infinity || currentRepeat<total)
-        ? (isMasc ? '🔁 Next Pass' : '🔄 Again')
-        : (isMasc ? '✅ Complete' : '✨ Done!');
+// ══════════════════════════════════════════════════════
+function renderSentence(){
+  if(!currentMantra)return;
+  autoAdvanceLock=false;
+  const ss=currentMantra.sentences, s=ss[currentSentenceIdx];
+  document.getElementById('currentMantraTitle').textContent=currentMantra.title;
+  const disp=document.getElementById('sentenceDisplay');
+  disp.style.animation='none';void disp.offsetWidth;disp.style.animation='fadeUp .55s ease';
+  disp.textContent=s;
+  const tp=document.getElementById('typePrompt');
+  tp.style.animation='none';void tp.offsetWidth;tp.style.animation='fadeUp .55s ease';
+  tp.textContent=s;
+  document.getElementById('typingInput').value='';
+  document.getElementById('typeFeedback').textContent='';
+  document.getElementById('typeFeedback').className='type-feedback';
+  const dotsEl=document.getElementById('progressDots');
+  dotsEl.innerHTML='';
+  ss.forEach((_,i)=>{const d=document.createElement('div');d.className='dot'+(i===currentSentenceIdx?' active':(i<currentSentenceIdx?' done':''));dotsEl.appendChild(d);});
+  const isLast=currentSentenceIdx===ss.length-1;
+  document.getElementById('nextBtn').style.display=isLast?'none':'inline-flex';
+  document.getElementById('repeatBtn').style.display=isLast?'inline-flex':'none';
+  if(isLast){
+    const total=getRepeatCount();
+    document.getElementById('repeatBtn').textContent=(total===Infinity||currentRepeat<total)?(isMasc?'🔁 Next Pass':'🔄 Again'):(isMasc?'✅ Complete':'✨ Done!');
   }
-  document.getElementById('prevBtn').disabled = (currentSentenceIdx===0 && currentRepeat===1);
+  document.getElementById('prevBtn').disabled=(currentSentenceIdx===0&&currentRepeat===1);
+  // Reset silence timer for voice mode
+  if(micActive) resetSilenceTimer();
 }
 
-// ══════════════════════════════════════════
+// ══════════════════════════════════════════════════════
 //  NAV — LISTEN
-// ══════════════════════════════════════════
-function nextSentence() {
-  if (!currentMantra) return;
-  if (currentSentenceIdx < currentMantra.sentences.length-1) {
-    currentSentenceIdx++; renderSentence(); showPrimingPhrase();
-  }
-}
-function prevSentence() {
-  if (!currentMantra) return;
-  if (currentSentenceIdx > 0) { currentSentenceIdx--; renderSentence(); showPrimingPhrase(); }
-  else if (currentRepeat > 1) { currentRepeat--; currentSentenceIdx=currentMantra.sentences.length-1; renderSentence(); showPrimingPhrase(); updateRepeatBadge(); }
-}
-function doRepeat() {
-  const total = getRepeatCount();
-  if (total===Infinity || currentRepeat<total) {
-    currentRepeat++; currentSentenceIdx=0; renderSentence(); showPrimingPhrase(); showAffirmation(); updateRepeatBadge();
-  } else { celebrate(); showToast(isMasc ? '✅ Session complete!' : '💖 You finished! Amazing!'); }
+// ══════════════════════════════════════════════════════
+function nextSentence(){if(!currentMantra)return;if(currentSentenceIdx<currentMantra.sentences.length-1){currentSentenceIdx++;renderSentence();showPrimingPhrase();}}
+function prevSentence(){if(!currentMantra)return;if(currentSentenceIdx>0){currentSentenceIdx--;renderSentence();showPrimingPhrase();}else if(currentRepeat>1){currentRepeat--;currentSentenceIdx=currentMantra.sentences.length-1;renderSentence();showPrimingPhrase();updateRepeatBadge();}}
+function doRepeat(){
+  const total=getRepeatCount();
+  if(total===Infinity||currentRepeat<total){currentRepeat++;currentSentenceIdx=0;renderSentence();showPrimingPhrase();showAffirmation();updateRepeatBadge();}
+  else{celebrate();showToast(isMasc?'✅ Session complete!':'💖 You finished! Amazing!');}
 }
 
-// ══════════════════════════════════════════
+// ══════════════════════════════════════════════════════
 //  NAV — TYPE
-// ══════════════════════════════════════════
-function advanceType() {
-  const total = getRepeatCount();
-  if (currentSentenceIdx < currentMantra.sentences.length-1) {
-    currentSentenceIdx++; renderSentence(); showPrimingPhrase();
-    setTimeout(()=>document.getElementById('typingInput').focus(),80);
-  } else if (total===Infinity || currentRepeat<total) {
-    currentRepeat++; currentSentenceIdx=0; renderSentence(); showPrimingPhrase(); showAffirmation(); updateRepeatBadge();
-    setTimeout(()=>document.getElementById('typingInput').focus(),80);
-  } else {
-    celebrate(); showToast(isMasc ? '✅ Session complete!' : '💖 You finished!');
-  }
+// ══════════════════════════════════════════════════════
+function advanceType(){
+  const total=getRepeatCount();
+  if(currentSentenceIdx<currentMantra.sentences.length-1){currentSentenceIdx++;renderSentence();showPrimingPhrase();setTimeout(()=>document.getElementById('typingInput').focus(),80);}
+  else if(total===Infinity||currentRepeat<total){currentRepeat++;currentSentenceIdx=0;renderSentence();showPrimingPhrase();showAffirmation();updateRepeatBadge();setTimeout(()=>document.getElementById('typingInput').focus(),80);}
+  else{celebrate();showToast(isMasc?'✅ Session complete!':'💖 You finished!');}
 }
-function nextSentenceType() { advanceType(); }
-function prevSentenceType() {
-  if (currentSentenceIdx>0) { currentSentenceIdx--; renderSentence(); showPrimingPhrase(); setTimeout(()=>document.getElementById('typingInput').focus(),80); }
-}
+function nextSentenceType(){advanceType();}
+function prevSentenceType(){if(currentSentenceIdx>0){currentSentenceIdx--;renderSentence();showPrimingPhrase();setTimeout(()=>document.getElementById('typingInput').focus(),80);}}
 
-// ══════════════════════════════════════════
+// ══════════════════════════════════════════════════════
 //  TYPING AUTO-ADVANCE
-// ══════════════════════════════════════════
-function normalize(s) { return s.toLowerCase().replace(/[^a-z0-9 ]/g,'').replace(/\s+/g,' ').trim(); }
-function checkTypingAuto() {
-  if (!currentMantra || autoAdvanceLock) return;
-  const target = normalize(currentMantra.sentences[currentSentenceIdx]||'');
-  const input  = normalize(document.getElementById('typingInput').value);
-  const fb = document.getElementById('typeFeedback');
-  if (!input) { fb.textContent=''; fb.className='type-feedback'; return; }
-
-  if (input === target) {
-    autoAdvanceLock = true;
-    fb.textContent = isMasc ? '✅ Locked.' : '💖 Perfect!';
-    fb.className = 'type-feedback correct';
-    setTimeout(advanceType, 420);
+// ══════════════════════════════════════════════════════
+function normalize(s){return s.toLowerCase().replace(/[^a-z0-9 ]/g,'').replace(/\s+/g,' ').trim();}
+function checkTypingAuto(){
+  if(!currentMantra||autoAdvanceLock)return;
+  const target=normalize(currentMantra.sentences[currentSentenceIdx]||'');
+  const input=normalize(document.getElementById('typingInput').value);
+  const fb=document.getElementById('typeFeedback');
+  if(!input){fb.textContent='';fb.className='type-feedback';return;}
+  if(input===target){
+    autoAdvanceLock=true;fb.textContent=isMasc?'✅ Locked.':'💖 Perfect!';fb.className='type-feedback correct';
+    setTimeout(advanceType,420);
   } else {
-    const iWords = input.split(' ').filter(Boolean);
-    const tWords = target.split(' ').filter(Boolean);
-    const matched = iWords.filter((w,i) => tWords[i] && tWords[i].startsWith(w)).length;
-    const ratio = tWords.length ? matched/tWords.length : 0;
-    if (ratio >= 0.72) { fb.textContent=isMasc?'🔶 Almost…':'🌸 Almost there!'; fb.className='type-feedback close'; }
-    else { fb.textContent=isMasc?'Keep typing…':'Keep going 💕'; fb.className='type-feedback wrong'; }
+    const iW=input.split(' ').filter(Boolean),tW=target.split(' ').filter(Boolean);
+    const m=iW.filter((w,i)=>tW[i]&&tW[i].startsWith(w)).length;
+    const r=tW.length?m/tW.length:0;
+    if(r>=0.72){fb.textContent=isMasc?'🔶 Almost…':'🌸 Almost there!';fb.className='type-feedback close';}
+    else{fb.textContent=isMasc?'Keep typing…':'Keep going 💕';fb.className='type-feedback wrong';}
   }
 }
 
-// ══════════════════════════════════════════
+// ══════════════════════════════════════════════════════
 //  PRACTICE MODE
-// ══════════════════════════════════════════
-function switchPracticeMode(mode) {
-  practiceMode = mode;
-  document.getElementById('listenSection').style.display = mode==='listen'?'block':'none';
-  document.getElementById('typeSection').classList.toggle('visible', mode==='type');
-  document.getElementById('listenTabBtn').classList.toggle('active', mode==='listen');
-  document.getElementById('typeTabBtn').classList.toggle('active', mode==='type');
-  if (mode==='type' && currentMantra) { renderSentence(); setTimeout(()=>document.getElementById('typingInput').focus(),100); }
+// ══════════════════════════════════════════════════════
+function switchPracticeMode(mode){
+  practiceMode=mode;
+  document.getElementById('listenSection').style.display=mode==='listen'?'block':'none';
+  document.getElementById('typeSection').classList.toggle('visible',mode==='type');
+  document.getElementById('listenTabBtn').classList.toggle('active',mode==='listen');
+  document.getElementById('typeTabBtn').classList.toggle('active',mode==='type');
+  if(mode==='type'&&currentMantra){renderSentence();setTimeout(()=>document.getElementById('typingInput').focus(),100);}
+  if(mode!=='listen'&&micActive)stopMic();
 }
 
-// ══════════════════════════════════════════
+// ══════════════════════════════════════════════════════
 //  AFFIRMATION
-// ══════════════════════════════════════════
-function showAffirmation() {
-  const pool = isMasc ? AFFIRMATIONS_MASC : AFFIRMATIONS;
-  document.getElementById('affirmationBox').textContent = pool[Math.floor(Math.random()*pool.length)];
+// ══════════════════════════════════════════════════════
+function showAffirmation(){const pool=isMasc?AFFIRMATIONS_MASC:AFFIRMATIONS;document.getElementById('affirmationBox').textContent=pool[Math.floor(Math.random()*pool.length)];}
+
+// ══════════════════════════════════════════════════════
+//  CELEBRATE / TOAST
+// ══════════════════════════════════════════════════════
+function celebrate(){
+  const msgs=isMasc?['💪 Done!','⚔️ Solid Work','🏆 Session Complete']:['✨ Beautiful! ✨','💖 Gorgeous!','🌸 You did it!','✨ Keep shining!'];
+  document.getElementById('celebText').textContent=msgs[Math.floor(Math.random()*msgs.length)];
+  const el=document.getElementById('celebration');el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2000);
+}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);}
+
+// ══════════════════════════════════════════════════════
+//  VOICE PANEL TOGGLE
+// ══════════════════════════════════════════════════════
+function toggleVoicePanel(){
+  voicePanelOpen=!voicePanelOpen;
+  document.getElementById('voiceBody').classList.toggle('open',voicePanelOpen);
 }
 
-// ══════════════════════════════════════════
-//  CELEBRATE
-// ══════════════════════════════════════════
-function celebrate() {
-  const msgs = isMasc ? ['💪 Done!','⚔️ Solid Work','🏆 Session Complete'] : ['✨ Beautiful! ✨','💖 Gorgeous!','🌸 You did it!','✨ Keep shining!'];
-  document.getElementById('celebText').textContent = msgs[Math.floor(Math.random()*msgs.length)];
-  const el = document.getElementById('celebration');
-  el.classList.add('show'); setTimeout(()=>el.classList.remove('show'),2000);
+// ══════════════════════════════════════════════════════
+//  MIC TOGGLE
+// ══════════════════════════════════════════════════════
+async function toggleMic(){
+  if(micActive){stopMic();}
+  else{await startMic();}
 }
 
-// ══════════════════════════════════════════
-//  TOAST
-// ══════════════════════════════════════════
-function showToast(msg) {
-  const t = document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2600);
+async function startMic(){
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){
+    showToast('Microphone not supported in this browser.');return;
+  }
+  try{
+    micStream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true},video:false});
+    audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+    const src=audioCtx.createMediaStreamSource(micStream);
+    analyser=audioCtx.createAnalyser();
+    analyser.fftSize=2048;
+    analyser.smoothingTimeConstant=0.8;
+    src.connect(analyser);
+    micActive=true;
+    silenceStart=null;
+    document.getElementById('micToggleBtn').textContent='🔴 Stop Listening';
+    document.getElementById('micToggleBtn').className='btn btn-sm btn-danger';
+    document.getElementById('micIndicator').className='mic-indicator listening';
+    document.getElementById('voiceStatusText').textContent='Listening… Say the line when you\'re ready.';
+    if(!voicePanelOpen)toggleVoicePanel();
+    startVoiceLoop();
+  } catch(err){
+    document.getElementById('micIndicator').className='mic-indicator error';
+    document.getElementById('voiceStatusText').textContent='Mic access denied. Please allow microphone in your browser.';
+    showToast('🎙 Microphone permission denied.');
+  }
 }
 
-// ══════════════════════════════════════════
-//  ADMIN
-// ══════════════════════════════════════════
-function toggleAdmin() { adminOpen=!adminOpen; document.getElementById('adminSection').classList.toggle('visible',adminOpen); }
-function addMantra() {
-  const title = document.getElementById('newTitle').value.trim();
-  const raw   = document.getElementById('newSentences').value.trim();
-  const tag   = document.getElementById('newTag').value.trim() || 'general';
-  const gender= document.getElementById('newGender').value;
-  if (!title||!raw) { showToast('Please fill in title and sentences!'); return; }
-  const sentences = raw.split('\n').map(s=>s.trim()).filter(Boolean);
-  if (!sentences.length) { showToast('Add at least one sentence!'); return; }
+function stopMic(){
+  micActive=false;
+  if(silenceTimer)clearTimeout(silenceTimer);silenceTimer=null;
+  if(pitchAnimFrame)cancelAnimationFrame(pitchAnimFrame);pitchAnimFrame=null;
+  if(micStream)micStream.getTracks().forEach(t=>t.stop());
+  if(audioCtx)audioCtx.close();
+  audioCtx=null;analyser=null;micStream=null;silenceStart=null;
+  document.getElementById('micToggleBtn').textContent='🎙 Start Listening';
+  document.getElementById('micToggleBtn').className='btn btn-sm btn-primary';
+  document.getElementById('micIndicator').className='mic-indicator';
+  document.getElementById('voiceStatusText').textContent='Microphone off.';
+  document.getElementById('voiceCountdown').textContent='';
+  document.getElementById('pitchBarFill').style.width='0%';
+  document.getElementById('pitchFeedback').textContent='';
+}
+
+// ══════════════════════════════════════════════════════
+//  VOICE LOOP — volume + pitch
+// ══════════════════════════════════════════════════════
+function startVoiceLoop(){
+  const bufLen=analyser.fftSize;
+  const timeBuf=new Float32Array(bufLen);
+  const freqBuf=new Uint8Array(analyser.frequencyBinCount);
+
+  function loop(){
+    if(!micActive)return;
+    pitchAnimFrame=requestAnimationFrame(loop);
+
+    // RMS volume
+    analyser.getFloatTimeDomainData(timeBuf);
+    let sum=0;for(let i=0;i<bufLen;i++)sum+=timeBuf[i]*timeBuf[i];
+    const rms=Math.sqrt(sum/bufLen);
+    const VOICE_THRESHOLD=0.015;
+    const isSpeaking=rms>VOICE_THRESHOLD;
+
+    // Pitch detection (autocorrelation)
+    let pitch=0;
+    if(isSpeaking){pitch=autoCorrelate(timeBuf,audioCtx.sampleRate);}
+    if(pitch>0)lastPitchHz=pitch;
+
+    updatePitchDisplay(pitch, isSpeaking);
+    handleSilenceTimer(isSpeaking);
+  }
+  loop();
+}
+
+// ── Autocorrelation pitch detector ──
+function autoCorrelate(buf, sampleRate){
+  const SIZE=buf.length;
+  let rms=0;for(let i=0;i<SIZE;i++)rms+=buf[i]*buf[i];
+  rms=Math.sqrt(rms/SIZE);
+  if(rms<0.01)return -1;
+  let r1=0,r2=SIZE-1;
+  for(let i=0;i<SIZE/2;i++){if(Math.abs(buf[i])<0.2){r1=i;break;}}
+  for(let i=1;i<SIZE/2;i++){if(Math.abs(buf[SIZE-i])<0.2){r2=SIZE-i;break;}}
+  const trimBuf=buf.slice(r1,r2);
+  const len=trimBuf.length;
+  const c=new Float32Array(len);
+  for(let i=0;i<len;i++){for(let j=0;j<len-i;j++)c[i]+=trimBuf[j]*trimBuf[j+i];}
+  let d=0;while(c[d]>c[d+1])d++;
+  let maxVal=-1,maxPos=-1;
+  for(let i=d;i<len;i++){if(c[i]>maxVal){maxVal=c[i];maxPos=i;}}
+  if(maxPos<0)return -1;
+  let T0=maxPos;
+  const x1=c[T0-1],x2=c[T0],x3=c[T0+1];
+  const a=(x1+x3-2*x2)/2,b=(x3-x1)/2;
+  if(a)T0=T0-b/(2*a);
+  return sampleRate/T0;
+}
+
+// ── Silence timer logic ──
+function handleSilenceTimer(isSpeaking){
+  const pauseSec=parseFloat(document.getElementById('pauseTimer').value)||3;
+  const indicator=document.getElementById('micIndicator');
+  const statusText=document.getElementById('voiceStatusText');
+  const countdown=document.getElementById('voiceCountdown');
+
+  if(isSpeaking){
+    silenceStart=null;
+    if(silenceTimer){clearTimeout(silenceTimer);silenceTimer=null;}
+    countdown.textContent='';
+    indicator.className='mic-indicator listening';
+    statusText.textContent='Detecting voice…';
+  } else {
+    if(!silenceStart)silenceStart=Date.now();
+    const elapsed=(Date.now()-silenceStart)/1000;
+    const remaining=Math.max(0,pauseSec-elapsed);
+    indicator.className='mic-indicator silent';
+
+    if(elapsed>=pauseSec){
+      // Fire!
+      silenceStart=null;
+      countdown.textContent='';
+      statusText.textContent='Silence detected — advancing…';
+      indicator.className='mic-indicator listening';
+      if(!autoAdvanceLock){
+        autoAdvanceLock=true;
+        setTimeout(()=>{
+          nextSentence();
+          autoAdvanceLock=false;
+        },200);
+      }
+    } else {
+      countdown.textContent=remaining.toFixed(1);
+      statusText.textContent=`Silence… advancing in ${remaining.toFixed(1)}s`;
+    }
+  }
+}
+
+// ── Reset silence timer (called on new sentence) ──
+function resetSilenceTimer(){
+  silenceStart=null;
+  document.getElementById('voiceCountdown').textContent='';
+  document.getElementById('voiceStatusText').textContent='Listening… Say the line when you\'re ready.';
+}
+
+// ══════════════════════════════════════════════════════
+//  PITCH DISPLAY & MATCHING
+// ══════════════════════════════════════════════════════
+function onPitchMatchToggle(){
+  pitchMatchEnabled=document.getElementById('pitchMatchToggle').checked;
+  document.getElementById('pitchMeterWrap').style.display=pitchMatchEnabled?'block':'none';
+  if(pitchMatchEnabled)updatePitchZoneMarkers();
+}
+
+function updatePitchZoneMarkers(){
+  const zone=isMasc?PITCH_ZONES.masculine:PITCH_ZONES.feminine;
+  const lowPct=hzToBarPct(zone.min),highPct=hzToBarPct(zone.max);
+  document.getElementById('pitchZoneLow').style.left=lowPct+'%';
+  document.getElementById('pitchZoneHigh').style.left=highPct+'%';
+  const label=isMasc?'Voice Pitch (target: masculine 85–180 Hz)':'Voice Pitch (target: feminine 160–320 Hz)';
+  document.getElementById('pitchMeterLabel').textContent=label;
+}
+
+function hzToBarPct(hz){
+  return Math.min(100,Math.max(0,(hz-PITCH_DISPLAY_MIN)/(PITCH_DISPLAY_MAX-PITCH_DISPLAY_MIN)*100));
+}
+
+function updatePitchDisplay(hz, isSpeaking){
+  if(!pitchMatchEnabled)return;
+  const fill=document.getElementById('pitchBarFill');
+  const fb=document.getElementById('pitchFeedback');
+  if(!isSpeaking||hz<=0){fill.style.width='0%';fb.textContent='';return;}
+  const pct=hzToBarPct(hz);
+  fill.style.width=pct+'%';
+
+  const zone=isMasc?PITCH_ZONES.masculine:PITCH_ZONES.feminine;
+  const buffer=20; // Hz tolerance
+  if(hz>=zone.min-buffer&&hz<=zone.max+buffer){
+    fb.textContent=isMasc?`✅ ${Math.round(hz)} Hz — solid masculine range`:`✅ ${Math.round(hz)} Hz — lovely feminine voice`;
+    fb.className='pitch-feedback good';
+  } else if(hz<zone.min-buffer){
+    if(!isMasc){
+      fb.textContent=`⬇️ ${Math.round(hz)} Hz — too deep, try raising your pitch a little`;
+      fb.className='pitch-feedback low';
+    } else {
+      fb.textContent=`✅ ${Math.round(hz)} Hz — nice and deep`;
+      fb.className='pitch-feedback good';
+    }
+  } else {
+    if(isMasc){
+      fb.textContent=`⬆️ ${Math.round(hz)} Hz — a bit high, try lowering your voice`;
+      fb.className='pitch-feedback high';
+    } else {
+      fb.textContent=`✅ ${Math.round(hz)} Hz — beautifully high!`;
+      fb.className='pitch-feedback good';
+    }
+  }
+}
+
+// ══════════════════════════════════════════════════════
+//  ADMIN — ADD MANTRA (in-memory only; download to commit)
+// ══════════════════════════════════════════════════════
+function toggleAdmin(){adminOpen=!adminOpen;document.getElementById('adminSection').classList.toggle('visible',adminOpen);}
+
+function addMantra(){
+  const title=document.getElementById('newTitle').value.trim();
+  const raw=document.getElementById('newSentences').value.trim();
+  const tag=document.getElementById('newTag').value.trim()||'general';
+  const gender=document.getElementById('newGender').value;
+  if(!title||!raw){showToast('Please fill in title and sentences!');return;}
+  const sentences=raw.split('\n').map(s=>s.trim()).filter(Boolean);
+  if(!sentences.length){showToast('Add at least one sentence!');return;}
   mantras.push({id:Date.now(),title,sentences,tag,gender});
-  document.getElementById('newTitle').value='';
-  document.getElementById('newSentences').value='';
-  document.getElementById('newTag').value='';
   renderMantraSelect();
-  showToast(isMasc?'✅ Mantra added.':'💖 Mantra added!');
+  showToast(isMasc?'✅ Added! Click Download to save permanently.':'💖 Added! Download Excel to save permanently.');
 }
 
-// ══════════════════════════════════════════
-//  EXCEL IMPORT
-// ══════════════════════════════════════════
-function importExcel(event) {
-  const file = event.target.files[0]; if (!file) return;
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    try {
-      const wb = XLSX.read(e.target.result,{type:'binary'});
-      const ws = wb.Sheets[wb.SheetNames[0]];
-      const data = XLSX.utils.sheet_to_json(ws,{defval:''});
-      const imported = [];
-      data.forEach((row,i) => {
-        const title=(row.title||'').trim(); const rawS=(row.sentences||'').trim();
-        if (!title||!rawS) return;
-        imported.push({id:row.id||Date.now()+i,title,sentences:rawS.split('|').map(s=>s.trim()).filter(Boolean),tag:(row.tag||'general').trim(),gender:(row.gender||'both').trim()});
-      });
-      if (!imported.length) { showToast('No valid mantras found!'); return; }
-      mantras=imported; activeTag='';
-      document.getElementById('tagSearchInput').value='';
-      document.getElementById('tagMatchDisplay').style.display='none';
-      renderMantraSelect();
-      showToast(`${isMasc?'✅':'💖'} Loaded ${imported.length} mantras!`);
-    } catch(err) { showToast('Error reading file.'); console.error(err); }
-  };
-  reader.readAsBinaryString(file); event.target.value='';
-}
-
-// ══════════════════════════════════════════
-//  EXCEL EXPORT
-// ══════════════════════════════════════════
-function exportExcel() {
-  if (!mantras.length) { showToast('No mantras to save!'); return; }
-  const rows = mantras.map(m=>({id:m.id,title:m.title,sentences:m.sentences.join('|'),tag:m.tag,gender:m.gender}));
+function downloadUpdatedExcel(){
+  if(!mantras.length){showToast('No mantras to save!');return;}
+  const rows=mantras.map(m=>({id:m.id,title:m.title,sentences:m.sentences.join('|'),tag:m.tag,gender:m.gender}));
   const wb=XLSX.utils.book_new();
   const ws=XLSX.utils.json_to_sheet(rows);
-  ws['!cols']=[{wch:8},{wch:28},{wch:80},{wch:20},{wch:12}];
+  ws['!cols']=[{wch:10},{wch:30},{wch:85},{wch:20},{wch:12}];
   XLSX.utils.book_append_sheet(wb,ws,'Mantras');
   XLSX.writeFile(wb,'mantras.xlsx');
-  showToast(isMasc?'✅ mantras.xlsx downloaded':'💖 mantras.xlsx saved!');
+  showToast(isMasc?'✅ mantras.xlsx downloaded — commit it to GitHub.':'💖 mantras.xlsx saved — commit it to GitHub!');
 }
 </script>
 </body>
