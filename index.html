@@ -970,17 +970,11 @@ function updatePitchDisplay(hz, isSpeaking){
 
 
 // ══════════════════════════════════════════════════════
-//  ⚙️  CONFIGURATION — edit these two lines
-//  GITHUB_OWNER : your GitHub username
-//  GITHUB_REPO  : your repository name
-//  DISPATCH_TOKEN: a Fine-grained PAT with only
-//    "Actions: Read & Write" scope on this repo.
-//    This token CAN be in the page — it cannot read
-//    or modify any files, only trigger the workflow.
+//  ⚙️  CONFIGURATION — set your Cloudflare Worker URL
+//  After deploying worker.js, paste its URL here.
+//  It looks like: https://mantra-magic.YOUR-NAME.workers.dev
 // ══════════════════════════════════════════════════════
-const GITHUB_OWNER   = 'Saffit';
-const GITHUB_REPO    = 'Mantras';
-const DISPATCH_TOKEN = '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';
+const WORKER_URL = 'https://mantra-magic.sherardp.workers.dev';
 
 // ══════════════════════════════════════════════════════
 //  ADMIN — URL-triggered (?admin in the URL shows form)
@@ -1009,73 +1003,42 @@ async function submitMantra() {
   const sentences = rawS.split('\n').map(s => s.trim()).filter(Boolean);
   if (!sentences.length) { showAdminStatus('error', '❌ No valid sentences found.'); return; }
 
-  if (DISPATCH_TOKEN === 'YOUR_ACTIONS_ONLY_TOKEN') {
-    showAdminStatus('error', '❌ Please set DISPATCH_TOKEN in index.html first.');
+  if (WORKER_URL.includes('YOUR-CLOUDFLARE')) {
+    showAdminStatus('error', '❌ Set WORKER_URL in index.html to your deployed Cloudflare Worker address.');
     return;
   }
 
   const btn = document.getElementById('commitBtn');
   btn.disabled = true;
-  btn.textContent = '⏳ Sending…';
-  showAdminStatus('info', '⏳ Triggering GitHub Action…');
+  btn.textContent = '⏳ Saving…';
+  showAdminStatus('info', '⏳ Saving your mantra…');
 
   try {
-    const resp = await fetch(
-      `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/dispatches`,
-      {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${DISPATCH_TOKEN}`,
-          'Accept':        'application/vnd.github+json',
-          'Content-Type':  'application/json',
-          'X-GitHub-Api-Version': '2022-11-28'
-        },
-        body: JSON.stringify({
-          event_type: 'add-mantra',
-          client_payload: {
-            title,
-            sentences: sentences.join('|'),
-            tag,
-            gender
-          }
-        })
-      }
+    const resp = await fetch(WORKER_URL, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ title, sentences, tag, gender })
+    });
+
+    const data = await resp.json();
+
+    if (!resp.ok) throw new Error(data.error || `Error ${resp.status}`);
+
+    // Show in local list immediately
+    mantras.push({ id: data.id, title: data.title, sentences, tag, gender });
+    renderMantraSelect();
+
+    document.getElementById('newTitle').value     = '';
+    document.getElementById('newSentences').value = '';
+    document.getElementById('newTag').value        = '';
+
+    showAdminStatus('success',
+      `✅ "${data.title}" saved! It will appear for everyone after GitHub Pages rebuilds (~1 min).`
     );
-
-    // GitHub returns 204 No Content on success
-    if (resp.status === 204) {
-      // Add to local list immediately so it's usable right now
-      mantras.push({
-        id: Date.now(),
-        title,
-        sentences,
-        tag,
-        gender
-      });
-      renderMantraSelect();
-
-      document.getElementById('newTitle').value     = '';
-      document.getElementById('newSentences').value = '';
-      document.getElementById('newTag').value        = '';
-
-      showAdminStatus('success',
-        `✅ "${title}" is being saved! The GitHub Action is running — it will appear for all users in about 1–2 minutes.`
-      );
-      showToast(isMasc ? '✅ Mantra queued!' : '💖 Mantra added!');
-
-    } else if (resp.status === 401) {
-      throw new Error('Token invalid or expired. Check your DISPATCH_TOKEN in index.html.');
-    } else if (resp.status === 404) {
-      throw new Error('Repo not found or workflow not enabled. Check GITHUB_OWNER and GITHUB_REPO.');
-    } else if (resp.status === 422) {
-      throw new Error('Workflow file not found. Make sure .github/workflows/add-mantra.yml is committed.');
-    } else {
-      const body = await resp.text();
-      throw new Error(`GitHub API returned ${resp.status}: ${body}`);
-    }
+    showToast(isMasc ? '✅ Mantra saved!' : '💖 Mantra added!');
 
   } catch (err) {
-    console.error('Dispatch error:', err);
+    console.error('Worker error:', err);
     showAdminStatus('error', `❌ ${err.message}`);
   } finally {
     btn.disabled = false;
