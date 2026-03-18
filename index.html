@@ -390,78 +390,39 @@ body.masc .admin-input:focus{border-color:var(--masc-steel);}
   </div>
 
 
-  <!-- ADMIN PANEL — hidden until correct password entered -->
-  <div id="adminGate" style="text-align:center;padding:10px 0 20px;">
-    <button class="btn btn-secondary" style="opacity:.35;font-size:.75rem;letter-spacing:.12em;" onclick="showAdminGate()">⚙</button>
-  </div>
-
+  <!-- ADMIN PANEL — visible only when URL contains ?admin -->
   <div class="card" id="adminCard" style="display:none;">
-    <div class="section-title">🔐 Admin — Add Mantra</div>
+    <div class="section-title">✍️ Add a Mantra</div>
+    <p class="admin-hint" style="margin-bottom:18px;">Your mantra will be saved directly to the site's mantra list for everyone.</p>
 
-    <!-- Step 1: auth -->
-    <div id="adminAuthStep">
-      <div class="admin-field-group">
-        <label class="admin-label">Admin Password</label>
-        <input type="password" class="admin-input" id="adminPassword" placeholder="Enter password…" onkeydown="if(event.key==='Enter')checkAdminPassword()">
-        <button class="btn btn-primary" style="margin-top:10px;width:100%;" onclick="checkAdminPassword()">Unlock</button>
+    <div class="admin-field-group">
+      <label class="admin-label">Mantra Title</label>
+      <input type="text" class="admin-input" id="newTitle" placeholder="e.g. I Am Radiant">
+    </div>
+    <div class="admin-field-group">
+      <label class="admin-label">Sentences <span class="admin-hint-inline">(one per line)</span></label>
+      <textarea class="admin-input admin-textarea" id="newSentences" placeholder="I am radiant and beautiful.&#10;My light shines brightly.&#10;I attract good things."></textarea>
+    </div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;">
+      <div class="admin-field-group" style="flex:1;min-width:140px;">
+        <label class="admin-label">Tag</label>
+        <input type="text" class="admin-input" id="newTag" placeholder="e.g. confidence">
       </div>
-      <p class="admin-hint">Set your password in the <code>ADMIN_PASSWORD</code> constant in the page source.</p>
+      <div class="admin-field-group" style="flex:1;min-width:140px;">
+        <label class="admin-label">Gender</label>
+        <select class="admin-input admin-select" id="newGender">
+          <option value="both">Both</option>
+          <option value="feminine">Feminine</option>
+          <option value="masculine">Masculine</option>
+        </select>
+      </div>
     </div>
 
-    <!-- Step 2: GitHub config (shown after password) -->
-    <div id="adminFormStep" style="display:none;">
-      <div class="admin-field-group">
-        <label class="admin-label">GitHub Personal Access Token <span class="admin-hint-inline">(never saved — memory only)</span></label>
-        <input type="password" class="admin-input" id="ghToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off">
-        <p class="admin-hint">Needs <strong>Contents: read &amp; write</strong> permission on your repo. <a href="https://github.com/settings/tokens/new?scopes=repo&description=MantraMagicAdmin" target="_blank" rel="noopener" style="color:var(--pink)">Create one here ↗</a></p>
-      </div>
-      <div style="display:flex;gap:12px;flex-wrap:wrap;">
-        <div class="admin-field-group" style="flex:1;min-width:160px;">
-          <label class="admin-label">GitHub Owner</label>
-          <input type="text" class="admin-input" id="ghOwner" placeholder="your-username" autocomplete="off">
-        </div>
-        <div class="admin-field-group" style="flex:1;min-width:160px;">
-          <label class="admin-label">Repository Name</label>
-          <input type="text" class="admin-input" id="ghRepo" placeholder="your-repo-name" autocomplete="off">
-        </div>
-      </div>
-      <div class="admin-field-group">
-        <label class="admin-label">Branch</label>
-        <input type="text" class="admin-input" id="ghBranch" value="main" autocomplete="off">
-      </div>
+    <div id="adminStatus" class="status-banner" style="margin:14px 0;"></div>
 
-      <hr style="margin:20px 0;border:none;border-top:1px solid rgba(255,105,180,.18);">
-
-      <div class="admin-field-group">
-        <label class="admin-label">Mantra Title</label>
-        <input type="text" class="admin-input" id="newTitle" placeholder="e.g. I Am Radiant">
-      </div>
-      <div class="admin-field-group">
-        <label class="admin-label">Sentences <span class="admin-hint-inline">(one per line)</span></label>
-        <textarea class="admin-input admin-textarea" id="newSentences" placeholder="I am radiant and beautiful.&#10;My light shines brightly.&#10;I attract good things."></textarea>
-      </div>
-      <div style="display:flex;gap:12px;flex-wrap:wrap;">
-        <div class="admin-field-group" style="flex:1;min-width:140px;">
-          <label class="admin-label">Tag</label>
-          <input type="text" class="admin-input" id="newTag" placeholder="e.g. confidence">
-        </div>
-        <div class="admin-field-group" style="flex:1;min-width:140px;">
-          <label class="admin-label">Gender</label>
-          <select class="admin-input admin-select" id="newGender">
-            <option value="both">Both</option>
-            <option value="feminine">Feminine</option>
-            <option value="masculine">Masculine</option>
-          </select>
-        </div>
-      </div>
-
-      <div id="adminStatus" class="status-banner" style="margin:14px 0;"></div>
-
-      <button class="btn btn-primary" style="width:100%;" id="commitBtn" onclick="commitMantraToGitHub()">
-        🚀 Add &amp; Commit to GitHub
-      </button>
-      <p class="admin-hint" style="margin-top:10px;text-align:center;">This will update <strong>mantras.xlsx</strong> directly in your repo via the GitHub API.</p>
-    </div>
+    <button class="btn btn-primary" style="width:100%;" id="commitBtn" onclick="submitMantra()">
+      💖 Add Mantra
+    </button>
   </div>
 
 </div>
@@ -535,6 +496,7 @@ const PITCH_DISPLAY_MIN = 60, PITCH_DISPLAY_MAX = 400; // bar range
 window.onload = () => {
   createSparkles();
   loadExcelFromGitHub();
+  initAdmin();
   document.getElementById('pauseTimer').addEventListener('input', () => {
     document.getElementById('timerPreview').textContent = document.getElementById('pauseTimer').value;
   });
@@ -1008,31 +970,24 @@ function updatePitchDisplay(hz, isSpeaking){
 
 
 // ══════════════════════════════════════════════════════
-//  ADMIN — PASSWORD & GITHUB API
-//  ↓ Change this to your own password ↓
+//  ⚙️  CONFIGURATION — edit these two lines
+//  GITHUB_OWNER : your GitHub username
+//  GITHUB_REPO  : your repository name
+//  DISPATCH_TOKEN: a Fine-grained PAT with only
+//    "Actions: Read & Write" scope on this repo.
+//    This token CAN be in the page — it cannot read
+//    or modify any files, only trigger the workflow.
 // ══════════════════════════════════════════════════════
-const ADMIN_PASSWORD = 'mantra-admin-2025';
+const GITHUB_OWNER   = 'Saffit';
+const GITHUB_REPO    = 'Mantras';
+const DISPATCH_TOKEN = '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';
 
-// In-memory only — never persisted
-let ghTokenSession = '';
-
-function showAdminGate() {
-  const card = document.getElementById('adminCard');
-  card.style.display = card.style.display === 'none' ? 'block' : 'none';
-  if (card.style.display === 'block') {
-    card.scrollIntoView({behavior:'smooth', block:'start'});
-  }
-}
-
-function checkAdminPassword() {
-  const entered = document.getElementById('adminPassword').value;
-  if (entered === ADMIN_PASSWORD) {
-    document.getElementById('adminAuthStep').style.display = 'none';
-    document.getElementById('adminFormStep').style.display = 'block';
-    showToast(isMasc ? '🔓 Unlocked.' : '💖 Welcome back!');
-  } else {
-    showAdminStatus('error', '❌ Incorrect password.');
-    document.getElementById('adminPassword').value = '';
+// ══════════════════════════════════════════════════════
+//  ADMIN — URL-triggered (?admin in the URL shows form)
+// ══════════════════════════════════════════════════════
+function initAdmin() {
+  if (window.location.search.includes('admin') || window.location.hash.includes('admin')) {
+    document.getElementById('adminCard').style.display = 'block';
   }
 }
 
@@ -1042,130 +997,89 @@ function showAdminStatus(type, msg) {
   el.className = `status-banner ${type} show`;
 }
 
-async function commitMantraToGitHub() {
-  const token  = document.getElementById('ghToken').value.trim();
-  const owner  = document.getElementById('ghOwner').value.trim();
-  const repo   = document.getElementById('ghRepo').value.trim();
-  const branch = document.getElementById('ghBranch').value.trim() || 'main';
+async function submitMantra() {
   const title  = document.getElementById('newTitle').value.trim();
   const rawS   = document.getElementById('newSentences').value.trim();
   const tag    = document.getElementById('newTag').value.trim() || 'general';
   const gender = document.getElementById('newGender').value;
 
-  if (!token)  { showAdminStatus('error', '❌ Please enter your GitHub token.'); return; }
-  if (!owner || !repo) { showAdminStatus('error', '❌ Please enter your GitHub owner and repo name.'); return; }
-  if (!title || !rawS) { showAdminStatus('error', '❌ Please fill in the title and sentences.'); return; }
+  if (!title) { showAdminStatus('error', '❌ Please enter a title.'); return; }
+  if (!rawS)  { showAdminStatus('error', '❌ Please enter at least one sentence.'); return; }
 
   const sentences = rawS.split('\n').map(s => s.trim()).filter(Boolean);
-  if (!sentences.length) { showAdminStatus('error', '❌ At least one sentence required.'); return; }
+  if (!sentences.length) { showAdminStatus('error', '❌ No valid sentences found.'); return; }
+
+  if (DISPATCH_TOKEN === 'YOUR_ACTIONS_ONLY_TOKEN') {
+    showAdminStatus('error', '❌ Please set DISPATCH_TOKEN in index.html first.');
+    return;
+  }
 
   const btn = document.getElementById('commitBtn');
   btn.disabled = true;
-  btn.textContent = '⏳ Working…';
-  showAdminStatus('info', '⏳ Fetching current mantras.xlsx from GitHub…');
-
-  const FILE_PATH = 'mantras.xlsx';
-  const API = `https://api.github.com/repos/${owner}/${repo}/contents/${FILE_PATH}`;
-  const headers = {
-    'Authorization': `Bearer ${token}`,
-    'Accept': 'application/vnd.github+json',
-    'X-GitHub-Api-Version': '2022-11-28'
-  };
+  btn.textContent = '⏳ Sending…';
+  showAdminStatus('info', '⏳ Triggering GitHub Action…');
 
   try {
-    // ── Step 1: get current file SHA + content ──
-    let currentSha = null;
-    let currentMantras = [...mantras]; // start from in-memory (already loaded from GitHub on page load)
+    const resp = await fetch(
+      `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/dispatches`,
+      {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${DISPATCH_TOKEN}`,
+          'Accept':        'application/vnd.github+json',
+          'Content-Type':  'application/json',
+          'X-GitHub-Api-Version': '2022-11-28'
+        },
+        body: JSON.stringify({
+          event_type: 'add-mantra',
+          client_payload: {
+            title,
+            sentences: sentences.join('|'),
+            tag,
+            gender
+          }
+        })
+      }
+    );
 
-    const getResp = await fetch(`${API}?ref=${branch}`, {headers});
-    if (getResp.ok) {
-      const fileData = await getResp.json();
-      currentSha = fileData.sha;
-      // Decode the base64 content and re-parse it for freshness
-      const rawBase64 = fileData.content.replace(/\n/g,'');
-      const binary = atob(rawBase64);
-      const bytes = new Uint8Array(binary.length);
-      for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-      const wb = XLSX.read(bytes, {type:'array'});
-      const ws = wb.Sheets[wb.SheetNames[0]];
-      const data = XLSX.utils.sheet_to_json(ws, {defval:''});
-      const parsed = [];
-      data.forEach((row, i) => {
-        const t=(row.title||'').trim(), s=(row.sentences||'').trim();
-        if (!t||!s) return;
-        parsed.push({id:row.id||Date.now()+i, title:t, sentences:s.split('|').map(x=>x.trim()).filter(Boolean), tag:(row.tag||'general').trim(), gender:(row.gender||'both').trim()});
+    // GitHub returns 204 No Content on success
+    if (resp.status === 204) {
+      // Add to local list immediately so it's usable right now
+      mantras.push({
+        id: Date.now(),
+        title,
+        sentences,
+        tag,
+        gender
       });
-      if (parsed.length) currentMantras = parsed;
-    } else if (getResp.status !== 404) {
-      throw new Error(`GitHub API error: ${getResp.status} ${getResp.statusText}`);
-    }
-    // 404 = file doesn't exist yet — we'll create it
+      renderMantraSelect();
 
-    showAdminStatus('info', '⏳ Building updated mantras.xlsx…');
+      document.getElementById('newTitle').value     = '';
+      document.getElementById('newSentences').value = '';
+      document.getElementById('newTag').value        = '';
 
-    // ── Step 2: append new mantra ──
-    const newId = Date.now();
-    currentMantras.push({id: newId, title, sentences, tag, gender});
+      showAdminStatus('success',
+        `✅ "${title}" is being saved! The GitHub Action is running — it will appear for all users in about 1–2 minutes.`
+      );
+      showToast(isMasc ? '✅ Mantra queued!' : '💖 Mantra added!');
 
-    // ── Step 3: build xlsx in memory ──
-    const rows = currentMantras.map(m => ({
-      id: m.id,
-      title: m.title,
-      sentences: m.sentences.join('|'),
-      tag: m.tag,
-      gender: m.gender
-    }));
-    const wb = XLSX.utils.book_new();
-    const ws = XLSX.utils.json_to_sheet(rows);
-    ws['!cols'] = [{wch:12},{wch:30},{wch:90},{wch:20},{wch:12}];
-    XLSX.utils.book_append_sheet(wb, ws, 'Mantras');
-
-    // Write to binary array, then base64-encode
-    const wbout = XLSX.write(wb, {bookType:'xlsx', type:'array'});
-    const bytes = new Uint8Array(wbout);
-    let binary = '';
-    for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
-    const b64content = btoa(binary);
-
-    showAdminStatus('info', '⏳ Committing to GitHub…');
-
-    // ── Step 4: PUT to GitHub API ──
-    const body = {
-      message: `Add mantra: ${title}`,
-      content: b64content,
-      branch: branch
-    };
-    if (currentSha) body.sha = currentSha; // required for update; omit for create
-
-    const putResp = await fetch(API, {
-      method: 'PUT',
-      headers: {...headers, 'Content-Type': 'application/json'},
-      body: JSON.stringify(body)
-    });
-
-    if (!putResp.ok) {
-      const errData = await putResp.json().catch(()=>({}));
-      throw new Error(errData.message || `${putResp.status} ${putResp.statusText}`);
+    } else if (resp.status === 401) {
+      throw new Error('Token invalid or expired. Check your DISPATCH_TOKEN in index.html.');
+    } else if (resp.status === 404) {
+      throw new Error('Repo not found or workflow not enabled. Check GITHUB_OWNER and GITHUB_REPO.');
+    } else if (resp.status === 422) {
+      throw new Error('Workflow file not found. Make sure .github/workflows/add-mantra.yml is committed.');
+    } else {
+      const body = await resp.text();
+      throw new Error(`GitHub API returned ${resp.status}: ${body}`);
     }
 
-    // ── Step 5: update local state ──
-    mantras = currentMantras;
-    renderMantraSelect();
-
-    // Clear form fields
-    document.getElementById('newTitle').value = '';
-    document.getElementById('newSentences').value = '';
-    document.getElementById('newTag').value = '';
-
-    showAdminStatus('success', `✅ "${title}" committed to ${owner}/${repo}! GitHub Pages will update in ~1 minute.`);
-    showToast(isMasc ? '✅ Committed to GitHub!' : '💖 Mantra saved to GitHub!');
-
-  } catch(err) {
-    console.error('GitHub commit error:', err);
-    showAdminStatus('error', `❌ Error: ${err.message}`);
+  } catch (err) {
+    console.error('Dispatch error:', err);
+    showAdminStatus('error', `❌ ${err.message}`);
   } finally {
     btn.disabled = false;
-    btn.innerHTML = '🚀 Add &amp; Commit to GitHub';
+    btn.textContent = '💖 Add Mantra';
   }
 }
 </script>
