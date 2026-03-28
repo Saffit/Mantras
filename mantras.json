@@ -151,7 +151,7 @@
       "Good girls obey.",
       "Good girls submit.",
       "Good girls rub their minds away.",
-      "Good girlsÂÂ edge.",
+      "Good girlsÃÂÃÂ edge.",
       "I am Bambi.",
       "I am such a good girl"
     ],
@@ -200,5 +200,16 @@
     ],
     "tag": "Bambi Sleep",
     "gender": "feminine"
+  },
+  {
+    "id": 1774676710576,
+    "title": "Good Bull",
+    "sentences": [
+      "I am a good bull.",
+      "Good bulls don't think.",
+      "Good bulls obey."
+    ],
+    "tag": "general",
+    "gender": "masculine"
   }
 ]
